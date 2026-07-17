@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "venus"
+version = "0.1.0"
+description = "Agentic AI system that translates natural language discovery goals into quantum computations"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = [
+    "qiskit>=2.0",
+    "qiskit-aer>=0.13",
+    "numpy>=1.26",
+    "scipy>=1.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+]
+
+[project.scripts]
+venus = "venus.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["venus*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
