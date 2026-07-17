@@ -1,0 +1,25 @@
+# config/llm_routing.yaml
+agents:
+  language_interface:
+    primary:   "groq/llama-3.3-70b-versatile"
+    fallback:  "ollama/llama3.3"
+    heavy:     "anthropic/claude-sonnet-4-6"
+
+  planner:
+    primary:   "ollama/llama3.3"
+    fallback:  "groq/llama-3.3-70b-versatile"
+    heavy:     "anthropic/claude-opus-4-6"
+
+  interpreter:
+    primary:   "ollama/gemma2"
+    fallback:  "gemini/gemini-1.5-flash"
+    heavy:     "gemini/gemini-1.5-pro"
+
+  judge:
+    primary:   "groq/llama-3.3-70b-versatile"
+    fallback:  "ollama/mistral"
+
+routing_rules:
+  prefer_local: true
+  max_cost_per_call_usd: 0.05
+  fallback_on_timeout: true
