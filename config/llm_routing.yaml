@@ -1,25 +1,25 @@
 # config/llm_routing.yaml
 agents:
   language_interface:
-    primary:   "groq/llama-3.3-70b-versatile"
-    fallback:  "ollama/llama3.3"
-    heavy:     "anthropic/claude-sonnet-4-6"
+    primary:   "vertex_ai/gemini-2.5-pro"
+    fallback:  "groq/llama-3.3-70b-versatile"
+    heavy:     "anthropic/claude-3-7-sonnet"
 
   planner:
-    primary:   "ollama/llama3.3"
-    fallback:  "groq/llama-3.3-70b-versatile"
-    heavy:     "anthropic/claude-opus-4-6"
+    primary:   "vertex_ai/gemini-2.5-pro"
+    fallback:  "anthropic/claude-3-5-haiku"
+    heavy:     "anthropic/claude-3-opus"
 
   interpreter:
-    primary:   "ollama/gemma2"
+    primary:   "vertex_ai/gemini-2.5-pro"
     fallback:  "gemini/gemini-1.5-flash"
-    heavy:     "gemini/gemini-1.5-pro"
+    heavy:     "anthropic/claude-3-7-sonnet"
 
   judge:
-    primary:   "groq/llama-3.3-70b-versatile"
-    fallback:  "ollama/mistral"
+    primary:   "vertex_ai/gemini-2.5-pro"
+    fallback:  "groq/llama-3.3-70b-versatile"
 
 routing_rules:
-  prefer_local: true
-  max_cost_per_call_usd: 0.05
+  provider_preference: ["vertex_ai", "gemini", "anthropic", "groq"]
+  max_cost_per_call_usd: 0.10
   fallback_on_timeout: true
