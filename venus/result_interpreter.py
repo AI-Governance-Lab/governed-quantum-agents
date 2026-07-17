@@ -133,7 +133,8 @@ class ResultInterpreter:
     def _interpret_grover(self, result: ExecutionResult, goal: str) -> str:
         n_qubits = result.metadata.get("n_qubits", "?")
         iterations = result.metadata.get("iterations", "?")
-        n_candidates = result.metadata.get("n_candidates", 2 ** (n_qubits if isinstance(n_qubits, int) else 4))
+        n_qubits_int = n_qubits if isinstance(n_qubits, int) else 4
+        n_candidates = result.metadata.get("n_candidates", 2 ** n_qubits_int)
         target = result.metadata.get("target", "?")
         top_states = self._top_states(result, n=5)
         best_bs = result.most_likely_bitstring

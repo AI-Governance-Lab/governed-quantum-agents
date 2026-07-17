@@ -195,7 +195,7 @@ class Executor:
                 bits = [int(b) for b in reversed(bitstring.replace(" ", ""))]
                 # Map 0 → +1, 1 → −1
                 paulis = [1 - 2 * b for b in bits]
-                if term.startswith("Z") and "Z" == term[0] and len(term) == 2:
+                if term.startswith("Z") and len(term) == 2:
                     q = int(term[1])
                     val = paulis[q] if q < len(paulis) else 0
                 elif len(term) == 4 and term[0] == "Z" and term[2] == "Z":

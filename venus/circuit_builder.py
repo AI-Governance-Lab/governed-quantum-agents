@@ -17,7 +17,6 @@ from typing import Any
 
 import numpy as np
 from qiskit.circuit import QuantumCircuit, ParameterVector
-from qiskit.circuit.library import QFT  # noqa: F401 – available for future use
 
 from venus.goal_parser import ProblemSpec, ProblemType
 
