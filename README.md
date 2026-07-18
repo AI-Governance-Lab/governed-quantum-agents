@@ -13,6 +13,23 @@
 
 ---
 
+## Table of Contents
+- [What Are Governed Quantum Agents?](#what-are-governed-quantum-agents)
+- [The Core Thesis](#the-core-thesis)
+- [Architecture](#architecture)
+  - [Bloat-Free Software Stack](#bloat-free-software-stack)
+- [How It Works](#how-it-works)
+- [🚀 Quick Start](#-quick-start)
+- [Enterprise Readiness & ROI](#enterprise-readiness--roi)
+- [Use Cases](#use-cases)
+- [Hybrid Infrastructure & LLM Routing](#hybrid-infrastructure--llm-routing)
+- [Tech Stack](#tech-stack)
+- [Project Status & Roadmap](#project-status--roadmap)
+- [Why Now?](#why-now)
+- [Relationship to AI Governance Lab](#relationship-to-ai-governance-lab)
+
+---
+
 ## What Are Governed Quantum Agents?
 
 Quantum computers are not just faster classical computers; they are fundamentally different. They explore vast combinatorial spaces simultaneously—solution landscapes so large that no classical system could traverse them in a human lifetime. However, harnessing that power usually requires deep expertise in quantum circuit design, linear algebra, and algorithmic mapping. The interface to quantum computing has historically been a PhD.
