@@ -1,10 +1,11 @@
-# ⚛️ Governed Quantum Agents (GQA)
+# ⚛️ Governed Quantum Agents (GQA) — formerly Venus
 
 **A governed, natural language interface to quantum-powered discovery.**
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![Cirq](https://img.shields.io/badge/Cirq-Google_Quantum-4285F4?style=flat-square&logo=google&logoColor=white)](https://quantumai.google/cirq)
 [![Gemini](https://img.shields.io/badge/Vertex_AI-Gemini_2.5_Pro-8B5CF6?style=flat-square&logo=googlecloud&logoColor=white)](https://cloud.google.com/vertex-ai)
+[![LiteLLM](https://img.shields.io/badge/Routing-LiteLLM-4A90E2?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-Apache_2.0-22C55E?style=flat-square)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Active_Research-F59E0B?style=flat-square)]()
 
@@ -14,19 +15,19 @@
 
 ## What Are Governed Quantum Agents?
 
-Quantum computers explore vast combinatorial spaces simultaneously—solution landscapes so large that no classical system could traverse them in a human lifetime. However, harnessing that power usually requires deep expertise in quantum circuit design, linear algebra, and algorithmic mapping. 
+Quantum computers are not just faster classical computers; they are fundamentally different. They explore vast combinatorial spaces simultaneously—solution landscapes so large that no classical system could traverse them in a human lifetime. However, harnessing that power usually requires deep expertise in quantum circuit design, linear algebra, and algorithmic mapping. The interface to quantum computing has historically been a PhD.
 
-**Governed Quantum Agents (GQA)** removes that barrier.
+**Governed Quantum Agents (GQA)**, the evolution of the Venus project, removes that barrier.
 
-GQA is an enterprise-grade agentic AI system that translates a natural language discovery goal into a quantum computation, executes it, and returns human-readable results—all under a strict **AI Governance framework**. You describe what you want to find, and the agent orchestrates everything securely.
+GQA is an enterprise-grade agentic AI system that translates a natural language discovery goal into a quantum computation, executes it, and returns human-readable results—all under a strict **AI Governance framework**. You describe what you want to find—a candidate drug molecule, an optimal material structure, a novel synthesis pathway, an engineering solution—and the agents orchestrate everything securely.
 
 ```text
-"Find me candidate molecules that inhibit the BACE-1 enzyme 
+"Find me candidate molecules that inhibit the BACE-1 enzyme
  with minimal off-target effects."
                     ↓
         [ Governed Quantum Agent ]
                     ↓
-"Here are 7 high-potential candidates ranked by binding affinity 
+"Here are 7 high-potential candidates ranked by binding affinity
  score, validated for toxicity, with structural rationale for each."
 ```
 
@@ -36,9 +37,9 @@ GQA is an enterprise-grade agentic AI system that translates a natural language 
 
 The human-quantum interface is the primary barrier to enterprise adoption.
 
-Quantum hardware is advancing rapidly, and algorithms for drug discovery, financial optimization, and materials science are proven. What is missing is the translation layer—a system that takes a human goal and turns it into a quantum computation without requiring the user to understand what a parameterized circuit is.
+Quantum hardware is advancing rapidly, and algorithms for drug discovery, financial optimization, and materials science are proven. What is missing is the translation layer—a system that takes a human goal and turns it into a quantum computation without requiring the user to understand what a qubit or parameterized circuit is.
 
-Furthermore, for this translation layer to be adopted by enterprises, it cannot be a "black box" LLM. It must be **governed, observable, and verifiable**. GQA is built to be that secure translation layer.
+Furthermore, for this translation layer to be adopted by enterprises, it cannot be a "black box" LLM. It must be **governed, observable, and verifiable**. GQA is built to be that secure translation layer, positioned today for an inflection point that is already visible.
 
 ---
 
@@ -48,7 +49,7 @@ The system acts as a **Quantum-Classical Hybrid Orchestrator**, structured aroun
 
 ```mermaid
 graph TB
-    USER["🧑 Researcher / Engineer\nNatural language discovery goal"]
+    USER["🧑 Researcher / Scientist / Engineer\nNatural language discovery goal"]
     USER -->|"Plain English"| LANG
 
     subgraph GQA ["⚛️ Governed Quantum Agents System"]
@@ -79,10 +80,10 @@ graph TB
         INTERP --> MEM
 
         MEM["💾 Discovery Memory\nVector Store (ChromaDB/FAISS)"]
-        
+
         MEM -->|"Refined goal"| PLANNER
         MEM --> OUT
-        
+
         JUDGE["⚖️ LLM-as-Judge Evaluator\nGovernance & Output Safety"]
         INTERP -.->|"Verification"| JUDGE
         JUDGE -.->|"Approved"| OUT
@@ -100,7 +101,7 @@ graph TB
 ## How It Works
 
 ### Step 1 — Intent Parsing
-The language interface (powered by Gemini 2.5 Pro) understands what the user wants to discover. It extracts the domain (chemistry, logistics, etc.), the objective function, and constraints safely.
+The language interface (powered by Gemini 2.5 Pro or local models) understands what the user wants to discover. It extracts the domain (chemistry, logistics, etc.), the objective function (minimize, maximize, find candidates), and constraints safely.
 
 ### Step 2 — Problem Decomposition
 The Planner Agent breaks the goal into subproblems mapped to quantum algorithms:
@@ -113,10 +114,10 @@ The Planner Agent breaks the goal into subproblems mapped to quantum algorithms:
 | Classification | **QSVM** | Toxicity prediction |
 
 ### Step 3 — Quantum Circuit Execution
-Circuits are built via **Google Cirq** and executed on scalable cloud infrastructure. The architecture is designed for seamless migration to real quantum backends (IonQ, Google Sycamore) as they mature.
+Circuits are built via **Google Cirq** and executed on scalable cloud infrastructure or local servers. The architecture is designed for seamless migration to real quantum backends (IonQ, Google Sycamore) as they mature.
 
 ### Step 4 — Result Interpretation & Memory
-Raw quantum output (probability distributions over bitstrings) is meaningless without context. The Interpreter Agent translates these back into domain language. Every run is stored in a vector database, allowing the agents to build a map of the discovery space across sessions.
+Raw quantum output (probability distributions over bitstrings) is meaningless without context. The Interpreter Agent translates these back into domain language. Every run is stored in a vector database, allowing the agents to build a map of the discovery space across sessions—refining hypotheses and avoiding dead ends.
 
 ### Step 5 — LLM-as-Judge Governance (The Verifier)
 Before any result is presented to the user, an independent `Judge Agent` evaluates the output against safety, compliance, and scientific validity guidelines. Hallucinations or insecure interpretations are caught here.
@@ -134,18 +135,17 @@ Before any result is presented to the user, an independent `Judge Agent` evaluat
 > **Execution:** Encodes multi-objective optimization as a QAOA problem, searching compositional spaces exponentially faster.
 
 **Logistics & Operations**
-> *"Optimize our delivery network for minimum fuel cost under strict time-window constraints."*
+> *"Optimize our 47-location delivery network for minimum fuel cost under strict time-window constraints."*
 > **Execution:** Vehicle routing mapped to QAOA to find near-optimal solutions, ensuring all constraints are strictly validated.
 
 ---
 
-## Enterprise LLM Routing & Governance
+## Hybrid Infrastructure & LLM Routing
 
-GQA is designed for enterprise cloud environments, completely moving away from local, unscalable hardware models. It utilizes **Google Cloud Platform (GCP)** and **Vertex AI** as its primary cognitive engine.
+GQA is model-agnostic and infrastructure-flexible by design. All LLM calls are routed through **LiteLLM**—a unified proxy that normalizes 100+ providers into a single API. This allows GQA to operate in two distinct modes depending on enterprise requirements:
 
-All LLM calls are routed through **LiteLLM**, providing a unified proxy that normalizes providers, tracks costs, and handles fallbacks gracefully.
-
-### Configured AI Models
+### Mode 1: Enterprise Cloud (Default)
+GQA utilizes **Google Cloud Platform (GCP)** and **Vertex AI** as its primary cognitive engine for unmatched reasoning capabilities.
 
 | Agent Role | Primary Model | Fallback Strategy |
 |---|---|---|
@@ -154,7 +154,17 @@ All LLM calls are routed through **LiteLLM**, providing a unified proxy that nor
 | **Interpreter Agent**| `vertex_ai/gemini-2.5-pro` | `gemini/gemini-1.5-flash` |
 | **Governance Judge** | `vertex_ai/gemini-2.5-pro` | `groq/llama-3.3-70b` |
 
-This ensures the highest tier of reasoning capability (`Gemini 2.5 Pro`) is used by default, while maintaining system resilience if cloud APIs experience downtime.
+### Mode 2: Private Local (Strict Data Residency)
+For organizations with absolute data residency concerns, GQA can run on **local private infrastructure** (e.g., Dell servers) using local LLMs via Ollama. In this mode, discovery targets never leave the internal network.
+
+| Model via Ollama | Size | Best for |
+|---|---|---|
+| `ollama/llama3.3` | 70B | Primary planning & governance |
+| `ollama/llama3.2` | 3B / 1B | Fast intent parsing |
+| `ollama/gemma2` | 27B | Reasoning, result interpretation |
+| `ollama/deepseek-r1` | 14B | Complex planning |
+
+LiteLLM handles retries, fallbacks, cost tracking, and provider normalization transparently across both modes.
 
 ---
 
@@ -162,13 +172,14 @@ This ensures the highest tier of reasoning capability (`Gemini 2.5 Pro`) is used
 
 | Component | Technology |
 |---|---|
-| **Primary Reasoning Engine** | Google Vertex AI (Gemini 2.5 Pro) |
+| **Primary Reasoning Engine** | Google Vertex AI (Gemini 2.5 Pro) / Local Ollama |
 | **LLM Gateway & Routing** | LiteLLM |
 | **Quantum Execution** | Google Cirq |
 | **Quantum Algorithms** | QAOA, VQE, Grover's, QSVM |
 | **Agent Framework** | Python 3.11, asyncio |
 | **Discovery Memory** | FAISS / ChromaDB (Vector Store) |
 | **Data Validation** | Pydantic v2 |
+| **Infrastructure** | GCP / Local Dell Server |
 
 ---
 
@@ -185,6 +196,16 @@ This ensures the highest tier of reasoning capability (`Gemini 2.5 Pro`) is used
 
 ---
 
+## Why Now?
+
+Quantum hardware is on an aggressive improvement curve. The systems that will achieve practical quantum advantage in drug discovery and materials science are 3–5 years away. The bottleneck at that point will not be hardware—it will be the interface between quantum capability and human intention. GQA is that interface, being built today.
+
+---
+
 ## Relationship to AI Governance Lab
 
 Governed Quantum Agents is a flagship project under the **AI Governance Lab** umbrella. The internal **LLM-as-Judge evaluation pipeline** used in GQA represents the core philosophy of the Lab: bringing enterprise-grade LLM observability, safety, and strict compliance to the most advanced AI frontiers.
+
+---
+
+*Governed Quantum Agents · Quantum-Classical Hybrid Discovery Engine · Cirq · Gemini · Built for the next inflection point*
