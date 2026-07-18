@@ -1,4 +1,4 @@
-# ⚛️ Governed Quantum Agents (GQA) — formerly Venus
+# ⚛️ Venus: Governed Quantum Agents (GQA)
 
 **A governed, natural language interface to quantum-powered discovery.**
 
@@ -17,9 +17,9 @@
 
 Quantum computers are not just faster classical computers; they are fundamentally different. They explore vast combinatorial spaces simultaneously—solution landscapes so large that no classical system could traverse them in a human lifetime. However, harnessing that power usually requires deep expertise in quantum circuit design, linear algebra, and algorithmic mapping. The interface to quantum computing has historically been a PhD.
 
-**Governed Quantum Agents (GQA)**, the evolution of the Venus project, removes that barrier.
+**Venus: Governed Quantum Agents (GQA)** removes that barrier.
 
-GQA is an enterprise-grade agentic AI system that translates a natural language discovery goal into a quantum computation, executes it, and returns human-readable results—all under a strict **AI Governance framework**. You describe what you want to find—a candidate drug molecule, an optimal material structure, a novel synthesis pathway, an engineering solution—and the agents orchestrate everything securely.
+Venus (GQA) is an enterprise-grade agentic AI system that translates a natural language discovery goal into a quantum computation, executes it, and returns human-readable results—all under a strict **AI Governance framework**. You describe what you want to find—a candidate drug molecule, an optimal material structure, a novel synthesis pathway, an engineering solution—and the agents orchestrate everything securely.
 
 ```text
 "Find me candidate molecules that inhibit the BACE-1 enzyme
@@ -39,7 +39,7 @@ The human-quantum interface is the primary barrier to enterprise adoption.
 
 Quantum hardware is advancing rapidly, and algorithms for drug discovery, financial optimization, and materials science are proven. What is missing is the translation layer—a system that takes a human goal and turns it into a quantum computation without requiring the user to understand what a qubit or parameterized circuit is.
 
-Furthermore, for this translation layer to be adopted by enterprises, it cannot be a "black box" LLM. It must be **governed, observable, and verifiable**. GQA is built to be that secure translation layer, positioned today for an inflection point that is already visible.
+Furthermore, for this translation layer to be adopted by enterprises, it cannot be a "black box" LLM. It must be **governed, observable, and verifiable**. Venus is built to be that secure translation layer, positioned today for an inflection point that is already visible.
 
 ---
 
@@ -52,7 +52,7 @@ graph TB
     USER["🧑 Researcher / Scientist / Engineer\nNatural language discovery goal"]
     USER -->|"Plain English"| LANG
 
-    subgraph GQA ["⚛️ Governed Quantum Agents System"]
+    subgraph GQA ["⚛️ Venus: Governed Quantum Agents System"]
 
         LANG["🗣️ Language Interface Agent\nVertex AI Gemini 2.5 Pro\nIntent parsing & Context"]
         LANG --> PLANNER
@@ -142,10 +142,10 @@ Before any result is presented to the user, an independent `Judge Agent` evaluat
 
 ## Hybrid Infrastructure & LLM Routing
 
-GQA is model-agnostic and infrastructure-flexible by design. All LLM calls are routed through **LiteLLM**—a unified proxy that normalizes 100+ providers into a single API. This allows GQA to operate in two distinct modes depending on enterprise requirements:
+Venus is model-agnostic and infrastructure-flexible by design. All LLM calls are routed through **LiteLLM**—a unified proxy that normalizes 100+ providers into a single API. This allows Venus to operate in two distinct modes depending on enterprise requirements:
 
 ### Mode 1: Enterprise Cloud (Default)
-GQA utilizes **Google Cloud Platform (GCP)** and **Vertex AI** as its primary cognitive engine for unmatched reasoning capabilities.
+Venus utilizes **Google Cloud Platform (GCP)** and **Vertex AI** as its primary cognitive engine for unmatched reasoning capabilities.
 
 | Agent Role | Primary Model | Fallback Strategy |
 |---|---|---|
@@ -155,7 +155,7 @@ GQA utilizes **Google Cloud Platform (GCP)** and **Vertex AI** as its primary co
 | **Governance Judge** | `vertex_ai/gemini-2.5-pro` | `groq/llama-3.3-70b` |
 
 ### Mode 2: Private Local (Strict Data Residency)
-For organizations with absolute data residency concerns, GQA can run on **local private infrastructure** (e.g., Dell servers) using local LLMs via Ollama. In this mode, discovery targets never leave the internal network.
+For organizations with absolute data residency concerns, Venus can run on **local private infrastructure** (e.g., Dell servers) using local LLMs via Ollama. In this mode, discovery targets never leave the internal network.
 
 | Model via Ollama | Size | Best for |
 |---|---|---|
@@ -198,14 +198,14 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 
 ## Why Now?
 
-Quantum hardware is on an aggressive improvement curve. The systems that will achieve practical quantum advantage in drug discovery and materials science are 3–5 years away. The bottleneck at that point will not be hardware—it will be the interface between quantum capability and human intention. GQA is that interface, being built today.
+Quantum hardware is on an aggressive improvement curve. The systems that will achieve practical quantum advantage in drug discovery and materials science are 3–5 years away. The bottleneck at that point will not be hardware—it will be the interface between quantum capability and human intention. Venus (GQA) is that interface, being built today.
 
 ---
 
 ## Relationship to AI Governance Lab
 
-Governed Quantum Agents is a flagship project under the **AI Governance Lab** umbrella. The internal **LLM-as-Judge evaluation pipeline** used in GQA represents the core philosophy of the Lab: bringing enterprise-grade LLM observability, safety, and strict compliance to the most advanced AI frontiers.
+Venus (Governed Quantum Agents) is a flagship project under the **AI Governance Lab** umbrella. The internal **LLM-as-Judge evaluation pipeline** used in Venus represents the core philosophy of the Lab: bringing enterprise-grade LLM observability, safety, and strict compliance to the most advanced AI frontiers.
 
 ---
 
-*Governed Quantum Agents · Quantum-Classical Hybrid Discovery Engine · Cirq · Gemini · Built for the next inflection point*
+*Venus: Governed Quantum Agents · Quantum-Classical Hybrid Discovery Engine · Cirq · Gemini · Built for the next inflection point*
