@@ -124,6 +124,39 @@ Before any result is presented to the user, an independent `Judge Agent` evaluat
 
 ---
 
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.11+
+- Credentials for your preferred LLM provider (e.g., `GEMINI_API_KEY`, `OPENAI_API_KEY`, or local `vLLM`/`Ollama` running)
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/AI-Governance-Lab/governed-quantum-agents.git
+   cd governed-quantum-agents
+   ```
+
+2. Create a virtual environment and install dependencies:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+3. Configure your environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env to add your API keys
+   ```
+
+### Running a Discovery Goal
+```bash
+python src/main.py --goal "Find a lightweight alloy composition with tensile strength above 900 MPa"
+```
+
+---
+
 ## Enterprise Readiness & ROI
 
 Venus is designed for management and executive stakeholders who require strict oversight, budget controls, and measurable ROI from AI investments. 
