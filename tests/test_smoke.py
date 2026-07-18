@@ -21,5 +21,4 @@ def test_src_packages_importable():
         "quantum",
     ]
     for package in packages:
-        mod = importlib.import_module(package)
-        assert mod is not None, f"Failed to import package: {package}"
+        importlib.import_module(package)
