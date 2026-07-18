@@ -96,6 +96,35 @@ graph TB
     style JUDGE fill:#4A044E,stroke:#EF4444,stroke-width:1.5px
 ```
 
+### Bloat-Free Software Stack
+
+To ensure strict enterprise governance and performance, Venus avoids heavy abstraction frameworks (like LangChain or AutoGen) in favor of a lean, deterministic software stack:
+
+```mermaid
+graph TD
+    subgraph "Software Architecture"
+        A["<b>Python Asyncio Event Loop</b><br/>Orchestrates non-blocking parallel tasks"]
+        
+        B["<b>Pydantic (v2)</b><br/>Enforces strict I/O schemas & data validation"]
+        
+        C["<b>LiteLLM Gateway</b><br/>Normalized routing, fallbacks & FinOps tracking"]
+        
+        D[("<b>LLMs</b><br/>Gemini / vLLM / Ollama")]
+        
+        A -->|"Constructs request via"| B
+        B -->|"Routes prompt via"| C
+        C -->|"Calls APIs"| D
+        D -->|"Raw Text Output"| C
+        C -->|"Returns to"| B
+        B -->|"Validates schema & returns to"| A
+    end
+```
+
+**Why this approach?**
+- **Deterministic Execution:** By using native `asyncio`, the orchestrator behavior is completely transparent, predictable, and easy to debug.
+- **Strict Governance:** Pydantic guarantees that the LLM's raw text output is explicitly coerced into validated JSON schemas. If an LLM hallucinates a missing field or incorrect data type, Pydantic catches and rejects it before it reaches the sensitive quantum execution layer.
+- **Provider Agnostic:** LiteLLM provides a single, unified interface. We can hot-swap Vertex AI for local NVIDIA vLLM nodes in milliseconds without changing any agent logic.
+
 ---
 
 ## How It Works
