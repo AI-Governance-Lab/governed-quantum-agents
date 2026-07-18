@@ -225,15 +225,27 @@ Venus supports enterprise organizational structures:
 
 ## Use Cases
 
-**Pharmaceutical Discovery**
+**🛡️ Cybersecurity & Threat Intelligence** *(High Demand)*
+> *"Analyze our global network logs to identify zero-day threat patterns and advanced persistent threats (APTs) hiding in the noise."*
+> **Execution:** Utilizes Grover's Algorithm to search massive, unstructured log databases exponentially faster than classical SIEM tools. The Governance Judge ensures no sensitive PII/IP is leaked during the analysis.
+
+**💹 Financial Risk & Fraud Detection** *(High Demand)*
+> *"Optimize our high-frequency trading portfolio to minimize risk against sudden macroeconomic shocks, while identifying complex, multi-layered fraud rings."*
+> **Execution:** Maps risk factors to QAOA for combinatorial optimization. Strict RBAC and audit trails ensure the models comply with SEC/FINRA financial regulations.
+
+**🌍 Climate Tech & Carbon Capture**
+> *"Discover novel Metal-Organic Frameworks (MOFs) that maximize CO2 absorption at room temperature."*
+> **Execution:** VQE (Variational Quantum Eigensolver) simulates the molecular ground states. The LLM-as-a-Judge verifies the scientific validity against known thermodynamics before presenting the candidate.
+
+**💊 Pharmaceutical Discovery**
 > *"Find candidate molecules that could inhibit COX-2 with fewer GI side effects than current NSAIDs."*
 > **Execution:** Maps to a VQE circuit, simulates ground state energies, returns ranked compounds validated by the Governance Judge.
 
-**Materials Science**
+**🔬 Materials Science**
 > *"Find a lightweight alloy composition with tensile strength above 900 MPa and corrosion resistance suitable for marine environments."*
 > **Execution:** Encodes multi-objective optimization as a QAOA problem, searching compositional spaces exponentially faster.
 
-**Logistics & Operations**
+**📦 Logistics & Operations**
 > *"Optimize our 47-location delivery network for minimum fuel cost under strict time-window constraints."*
 > **Execution:** Vehicle routing mapped to QAOA to find near-optimal solutions, ensuring all constraints are strictly validated.
 
