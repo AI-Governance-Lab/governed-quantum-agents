@@ -14,6 +14,7 @@
 ---
 
 ## Table of Contents
+- [🎯 TL;DR: The Ultimate Goal](#-tldr-the-ultimate-goal)
 - [What Are Governed Quantum Agents?](#what-are-governed-quantum-agents)
 - [The Core Thesis](#the-core-thesis)
 - [Architecture](#architecture)
@@ -27,6 +28,24 @@
 - [Project Status & Roadmap](#project-status--roadmap)
 - [Why Now?](#why-now)
 - [Relationship to AI Governance Lab](#relationship-to-ai-governance-lab)
+
+---
+
+## 🎯 TL;DR: The Ultimate Goal
+
+The ultimate goal of Venus is to act as a **translation layer** between human intent and complex quantum computers. 
+
+Instead of needing a PhD in quantum linear algebra to write circuit code, a scientist can simply type:
+> *"Find a candidate molecule that inhibits this specific enzyme without being toxic."*
+
+Here is exactly what the AI Agents do behind the scenes:
+1. **Understand:** The primary LLM parses the plain-English request.
+2. **Translate to Math:** The agents figure out which quantum algorithm is needed and write the Python/Cirq code to generate the actual quantum circuit.
+3. **Execute:** The circuit is executed (currently on simulators, eventually on real hardware).
+4. **Interpret:** Quantum computers return raw probability distributions (1s and 0s). The LLM reads these statistics and translates them back into a human answer.
+5. **Govern:** A separate LLM "Governance Judge" watches the entire process to ensure the AI didn't hallucinate, didn't break compliance (like GDPR/HIPAA), and that the science makes sense.
+
+**In short: An AI Agent that safely writes and executes quantum programs on your behalf.**
 
 ---
 
