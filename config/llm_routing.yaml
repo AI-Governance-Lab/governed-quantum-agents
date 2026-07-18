@@ -20,6 +20,13 @@ agents:
     fallback:  "groq/llama-3.3-70b-versatile"
 
 routing_rules:
-  provider_preference: ["vertex_ai", "gemini", "anthropic", "groq"]
+  provider_preference: ["vertex_ai", "vllm", "gemini", "anthropic", "groq"]
   max_cost_per_call_usd: 0.10
   fallback_on_timeout: true
+
+# Example local vLLM fallback configuration for strict data residency:
+#
+# agents:
+#   language_interface:
+#     primary: "vllm/meta-llama/Llama-3.3-70B-Instruct"
+#     fallback: "ollama/llama3.3"

@@ -19,7 +19,7 @@ Quantum computers are not just faster classical computers; they are fundamentall
 
 **Venus: Governed Quantum Agents (GQA)** removes that barrier.
 
-Venus (GQA) is an enterprise-grade agentic AI system that translates a natural language discovery goal into a quantum computation, executes it, and returns human-readable results—all under a strict **AI Governance framework**. You describe what you want to find—a candidate drug molecule, an optimal material structure, a novel synthesis pathway, an engineering solution—and the agents orchestrate everything securely.
+rVenus (GQA) is an enterprise-grade agentic AI system that translates a natural language discovery goal into a quantum computation, executes it, and returns human-readable results—all under a strict **AI Governance framework**. You describe what you want to find—a candidate drug molecule, an optimal material structure, a novel synthesis pathway, an engineering solution—and the agents orchestrate everything securely.
 
 ```text
 "Find me candidate molecules that inhibit the BACE-1 enzyme
@@ -155,8 +155,17 @@ Venus utilizes **Google Cloud Platform (GCP)** and **Vertex AI** as its primary 
 | **Governance Judge** | `vertex_ai/gemini-2.5-pro` | `groq/llama-3.3-70b` |
 
 ### Mode 2: Private Local (Strict Data Residency)
-For organizations with absolute data residency concerns, Venus can run on **local private infrastructure** (e.g., Dell servers) using local LLMs via Ollama. In this mode, discovery targets never leave the internal network.
+For organizations with absolute data residency concerns, Venus can run on **local private infrastructure** (e.g., NVIDIA DGX, Dell servers) using local LLMs. In this mode, discovery targets never leave the internal network. We support two local inference engines based on hardware capacity:
 
+#### High-Throughput (NVIDIA A100/H100 + vLLM)
+For enterprise-scale discovery and massive concurrent agent operations, Venus routes to **vLLM** for OpenAI-compatible, high-throughput model serving.
+| Model via vLLM | Size | Best for |
+|---|---|---|
+| `vllm/meta-llama/Llama-3.3-70B-Instruct` | 70B | Primary planning & governance |
+| `vllm/Qwen/Qwen2.5-Coder-32B-Instruct` | 32B | Complex planning & tool use |
+
+#### Lightweight (CPU/Entry-GPU + Ollama)
+For edge environments or lighter workloads.
 | Model via Ollama | Size | Best for |
 |---|---|---|
 | `ollama/llama3.3` | 70B | Primary planning & governance |
@@ -164,7 +173,7 @@ For organizations with absolute data residency concerns, Venus can run on **loca
 | `ollama/gemma2` | 27B | Reasoning, result interpretation |
 | `ollama/deepseek-r1` | 14B | Complex planning |
 
-LiteLLM handles retries, fallbacks, cost tracking, and provider normalization transparently across both modes.
+LiteLLM handles retries, fallbacks, cost tracking, and provider normalization transparently across all modes and backends.
 
 ---
 
@@ -172,14 +181,14 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 
 | Component | Technology |
 |---|---|
-| **Primary Reasoning Engine** | Google Vertex AI (Gemini 2.5 Pro) / Local Ollama |
+| **Primary Reasoning Engine** | Google Vertex AI (Gemini 2.5 Pro) / Local vLLM / Ollama |
 | **LLM Gateway & Routing** | LiteLLM |
 | **Quantum Execution** | Google Cirq |
 | **Quantum Algorithms** | QAOA, VQE, Grover's, QSVM |
 | **Agent Framework** | Python 3.11, asyncio |
 | **Discovery Memory** | FAISS / ChromaDB (Vector Store) |
 | **Data Validation** | Pydantic v2 |
-| **Infrastructure** | GCP / Local Dell Server |
+| **Infrastructure** | GCP / NVIDIA DGX (A100/H100) / Local Dell Server |
 
 ---
 
