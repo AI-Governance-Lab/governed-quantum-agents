@@ -3,12 +3,16 @@ import logging
 import sys
 import os
 
-# Import the new components
+# Import components
 from agents.planner import Planner
 from agents.interpreter import Interpreter
 from agents.judge import Judge
 from interface.llm_router import LLMRouter
 from bridge.problem_encoder import ProblemEncoder
+from bridge.algorithm_selector import AlgorithmSelector
+from bridge.circuit_generator import CircuitGenerator
+from quantum.execution import QuantumExecution
+from memory.vector_store import VectorStore
 
 
 def solve_problem(problem_description: str):
@@ -44,44 +48,108 @@ def solve_problem(problem_description: str):
     # 2. Instantiate agents and components with their respective LLM clients
     planner_client = llm_router.get_client('planner', 'primary')
     encoder_client = llm_router.get_client('problem_encoder', 'primary')
+    interpreter_client = llm_router.get_client('interpreter', 'primary')
+    judge_client = llm_router.get_client('judge', 'primary')
 
-    if not all([planner_client, encoder_client]):
-        logging.error("Could not get a required client from the LLM Router. Aborting.")
+    if not all([planner_client, encoder_client, interpreter_client, judge_client]):
+        logging.error("Could not get all required clients from the LLM Router. Aborting.")
         return
 
     planner = Planner(llm_client=planner_client)
     problem_encoder = ProblemEncoder(llm_client=encoder_client)
+    interpreter = Interpreter(llm_client=interpreter_client)
+    judge = Judge(llm_client=judge_client)
+
+    # Instantiate non-LLM components
+    algorithm_selector = AlgorithmSelector()
+    circuit_generator = CircuitGenerator()
+    quantum_execution = QuantumExecution()
+    vector_store = VectorStore()
+
+    print("\n[MEMORY] Checking historical GQA discovery records...")
+    similar_records = vector_store.search_similar(problem_description, limit=2)
+    if similar_records:
+        print("  Found similar past discoveries for guidance:")
+        for record in similar_records:
+            print(f"    - Goal: '{record.get('goal')}' | Algorithm: {record.get('data', {}).get('algorithm_name')}")
+    else:
+        print("  No previous discovery records found matching this domain. Beginning fresh run.")
 
     # 3. Use the Planner to create a plan
     plan = planner.create_plan(problem_description)
     
     print("\n[INFO] Agent workflow started.")
-    print("="*40)
+    print("="*50)
     print("Generated Plan:")
     for step in plan:
         print(f"  - {step}")
-    print("="*40)
+    print("="*50)
 
-    # 4. Begin executing the plan
+    # 4. Execute the plan step-by-step
     print("\n[INFO] Starting plan execution...")
-    encoded_problem = None
-    for step in plan:
-        # This is a simple keyword-based dispatch. A more robust system might
-        # use a structured plan format with explicit function calls.
-        if "encode" in step.lower():
-            encoded_problem = problem_encoder.encode(problem_description)
-            print("\n[EXECUTION] Step 1: Problem Encoding Complete.")
-            print(f"  - Output: {encoded_problem}")
-            break # For now, we only execute the first step.
     
-    if not encoded_problem:
-        logging.warning("Plan execution did not produce an encoded problem.")
+    # Step 1: Classical parameter encoding
+    print("\n[EXECUTION] Step 1: Classical Parameter Encoding...")
+    encoded_problem = problem_encoder.encode(problem_description)
+    print(f"  - Classical Encoding Output: {encoded_problem}")
 
-    # TODO: Implement Step 2: Select the most appropriate algorithm.
-    # TODO: Use the Interpreter and Judge agents as part of plan execution.
-    # TODO: Interact with the memory/vector store
-    
-    print("\n[INFO] Plan execution for subsequent steps is not yet implemented.")
+    # Step 2: Quantum Algorithm selection
+    print("\n[EXECUTION] Step 2: Quantum Algorithm Selection...")
+    selected_algorithm = algorithm_selector.select_algorithm(encoded_problem)
+    print(f"  - Selected Quantum Paradigm: {selected_algorithm}")
+
+    # Step 3: Quantum Circuit generation
+    print("\n[EXECUTION] Step 3: Parametric Circuit Generation...")
+    circuit = circuit_generator.generate_circuit(selected_algorithm, encoded_problem)
+    print("  - Generated Cirq Circuit:")
+    print("-" * 40)
+    print(circuit)
+    print("-" * 40)
+
+    # Step 4: Quantum Execution
+    print("\n[EXECUTION] Step 4: Local Quantum Simulation (cirq.Simulator)...")
+    execution_summary = quantum_execution.execute_circuit(circuit, repetitions=1000)
+    if not execution_summary.get("success"):
+        logging.error("Quantum simulation failed. Terminating loop.")
+        return
+    print("  - Measurement Statistics (Histograms):")
+    print(f"    - Repetitions: {execution_summary.get('repetitions')}")
+    print(f"    - Output distributions: {execution_summary.get('bitstring_counts')}")
+    print(f"    - Peak state: {execution_summary.get('dominant_state')} (Prob: {execution_summary.get('dominant_probability'):.2%})")
+
+    # Step 5: Interpretation
+    print("\n[EXECUTION] Step 5: Results Translation & Domain Interpretation...")
+    interpretation_findings = interpreter.interpret(execution_summary, selected_algorithm)
+    print(f"  - Scientific Natural Language Interpretation: {interpretation_findings.get('interpretation')}")
+    print(f"  - Estimation Confidence: {interpretation_findings.get('confidence')}")
+
+    # Step 6: Governance Audit
+    print("\n[EXECUTION] Step 6: AI Governance Safety Audit (LLM-as-Judge)...")
+    judge_findings = judge.evaluate(problem_description, interpretation_findings)
+    print(f"  - Safety Approved: {judge_findings.get('approved')}")
+    print(f"  - Compliance Score: {judge_findings.get('score')}")
+    print(f"  - Auditor Comments/Reasons:")
+    for reason in judge_findings.get("audit_reasons", []):
+        print(f"    * {reason}")
+    print(f"  - Governance Verdict: {judge_findings.get('verdict')}")
+
+    # Store discovery in memory if safety approved
+    if judge_findings.get("approved", False):
+        print("\n[MEMORY] Saving successful compliant discovery to Vector Store...")
+        discovery_payload = {
+            "algorithm_name": selected_algorithm,
+            "encoded_problem": encoded_problem,
+            "execution_summary": execution_summary,
+            "interpretation": interpretation_findings,
+            "governance_audit": judge_findings
+        }
+        vector_store.save_discovery(problem_description, discovery_payload)
+    else:
+        logging.warning("Discovery flagged by Governance Judge. Refusing to persist in Discovery Memory.")
+
+    print("\n" + "=" * 50)
+    print("⚛️ VENUS GOVERNED QUANTUM DISCOVERY PIPELINE COMPLETE ⚛️")
+    print("=" * 50)
 
 
 def main():

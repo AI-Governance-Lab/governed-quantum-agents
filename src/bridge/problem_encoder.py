@@ -30,11 +30,13 @@ class ProblemEncoder:
         # This is a placeholder for a real LLM call.
         # The output format would be standardized for different problem types.
         # For example, for an optimization problem:
-        if "optimization" in problem_description.lower():
+        norm_desc = problem_description.lower()
+        if "optimization" in norm_desc or "alloy" in norm_desc or "composition" in norm_desc or "strength" in norm_desc or "routing" in norm_desc:
+            variables = ["Titanium", "Aluminum", "Vanadium"] if "alloy" in norm_desc else ["x", "y"]
             encoded_problem = {
                 "problem_type": "Optimization",
                 "objective": "Find the minimum value of a function.",
-                "variables": ["x", "y"],
+                "variables": variables,
                 "constraints": ["x + y <= 10"],
                 "source_description": problem_description
             }

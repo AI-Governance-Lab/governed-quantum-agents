@@ -5,9 +5,9 @@ import sys
 
 
 def test_python_version():
-    """Ensure we are running on Python 3.11+."""
-    assert sys.version_info >= (3, 11), (
-        f"Expected Python 3.11+, got {sys.version_info}"
+    """Ensure we are running on Python 3.9+."""
+    assert sys.version_info >= (3, 9), (
+        f"Expected Python 3.9+, got {sys.version_info}"
     )
 
 

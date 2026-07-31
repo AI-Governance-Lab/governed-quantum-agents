@@ -216,8 +216,15 @@ Before any result is presented to the user, an independent `Judge Agent` evaluat
    ```
 
 ### Running a Discovery Goal
+To execute a discovery goal, pass the natural language goal as a positional argument:
 ```bash
-python src/main.py --goal "Find a lightweight alloy composition with tensile strength above 900 MPa"
+python src/main.py "Find an optimal alloy with tensile strength above 900 MPa"
+```
+
+### Running Tests
+To run the automated agentic and quantum simulation tests:
+```bash
+pytest
 ```
 
 ---
@@ -327,10 +334,10 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 | Phase | Milestone | Status |
 |---|---|---|
 | **v0.1** | Cirq simulation core & Cloud LLM routing (LiteLLM) | ✅ Complete |
-| **v0.2** | Vertex AI Gemini 2.5 Pro integration for Agentic loop | 🔄 Active |
-| **v0.3** | Governance Evaluator (LLM-as-Judge pipeline) | 📅 Planned |
-| **v0.4** | VQE for molecular simulation in chemistry domain | 📅 Planned |
-| **v0.5** | Multi-session discovery memory | 📅 Planned |
+| **v0.2** | Vertex AI Gemini 2.5 Pro integration for Agentic loop | ✅ Complete |
+| **v0.3** | Governance Evaluator (LLM-as-Judge pipeline) | ✅ Complete |
+| **v0.4** | VQE for molecular simulation in chemistry domain | ✅ Complete |
+| **v0.5** | Multi-session discovery memory | ✅ Complete |
 | **v1.0** | Real quantum hardware backend integration | 📅 Long-term |
 
 ---
