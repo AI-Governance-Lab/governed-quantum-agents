@@ -91,10 +91,10 @@ graph TB
 
     subgraph GQA ["⚛️ Venus: Governed Quantum Agents System"]
 
-        LANG["🗣️ Language Interface Agent\nVertex AI Gemini 2.5 Pro\nIntent parsing & Context"]
+        LANG["🗣️ Language Interface Agent\nGemini Pro\nIntent parsing & Context"]
         LANG --> PLANNER
 
-        PLANNER["🧠 Planner Agent\nGoal decomposition\nStrategy selection"]
+        PLANNER["🧠 Planner Agent\nGemini Pro\nGoal decomposition\nStrategy selection"]
 
         PLANNER --> BRIDGE
 
@@ -102,17 +102,17 @@ graph TB
             direction LR
             PROB["Problem Encoder"]
             ALG["Algorithm Selector\n(QAOA, VQE, QSVM, Grover)"]
-            CIRC["Circuit Generator\n(Cirq)"]
+            CIRC["Circuit Generator\n(Cirq & Qiskit)"]
             PROB --> ALG --> CIRC
         end
 
         BRIDGE --> QEX
 
-        QEX["⚛️ Quantum Execution Layer\nCirq simulator / Cloud Backends"]
+        QEX["⚛️ Quantum Execution Layer\nGoogle Cirq / IBM Qiskit Simulators\n& IBM Quantum Hardware"]
 
         QEX --> INTERP
 
-        INTERP["🔬 Result Interpreter Agent\nTranslates bitstring distributions\nback to domain language"]
+        INTERP["🔬 Result Interpreter Agent\nGemini Pro\nTranslates bitstring distributions\nback to domain language"]
 
         INTERP --> MEM
 
@@ -121,7 +121,7 @@ graph TB
         MEM -->|"Refined goal"| PLANNER
         MEM --> OUT
 
-        JUDGE["⚖️ LLM-as-Judge Evaluator\nGovernance & Output Safety"]
+        JUDGE["⚖️ LLM-as-Judge Evaluator\nGemini Pro\nGovernance & Output Safety"]
         INTERP -.->|"Verification"| JUDGE
         JUDGE -.->|"Approved"| OUT
     end
@@ -321,15 +321,6 @@ For edge environments or lighter workloads.
 | `ollama/deepseek-r1` | 14B | Complex planning |
 
 LiteLLM handles retries, fallbacks, cost tracking, and provider normalization transparently across all modes and backends.
-
----
-
-## 🤝 Unitary Fund
-
-Venus (GQA) is applying for a **Unitary Fund** microgrant! This grant will help us fund our open-source milestones:
-1. Enhancing the multi-backend execution capabilities (expanding Qiskit physical hardware support).
-2. Implementing more advanced quantum algorithms within the agent bridge.
-3. Conducting rigorous governance testing (LLM-as-a-judge) in the quantum computational workflow.
 
 ---
 
