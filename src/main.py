@@ -16,7 +16,7 @@ from quantum.execution import QuantumExecution
 from memory.vector_store import VectorStore
 
 
-async def solve_problem(problem_description: str, framework: str = "cirq"):
+async def solve_problem(problem_description: str, framework: str = "cirq", override_model: str = None):
     """
     This function orchestrates the problem-solving process asynchronously.
     """
@@ -41,7 +41,7 @@ async def solve_problem(problem_description: str, framework: str = "cirq"):
     
     # 1. Initialize the LLM Router
     try:
-        llm_router = LLMRouter(config_path='config/llm_routing.yaml')
+        llm_router = LLMRouter(config_path='config/llm_routing.yaml', override_model=override_model)
     except Exception as e:
         logging.error(f"Failed to initialize LLM Router. Exiting. Error: {e}")
         return
@@ -183,18 +183,24 @@ def main():
         choices=["cirq", "qiskit"],
         help="The quantum framework to use for circuit generation and execution."
     )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default=None,
+        help="Override the primary LLM model (e.g., 'openai/gpt-4o', 'anthropic/claude-3-7-sonnet')."
+    )
     
     args = parser.parse_args()
     
     if args.problem:
-        asyncio.run(solve_problem(args.problem, args.framework))
+        asyncio.run(solve_problem(args.problem, args.framework, args.model))
     else:
         logging.info("No problem description provided. Running in interactive mode.")
         try:
             while True:
                 problem_description = input("\nPlease describe the problem you want to solve (or press Ctrl+C to exit):\n> ")
                 if problem_description.strip():
-                    asyncio.run(solve_problem(problem_description, args.framework))
+                    asyncio.run(solve_problem(problem_description, args.framework, args.model))
                 else:
                     print("Please enter a description.")
         except KeyboardInterrupt:

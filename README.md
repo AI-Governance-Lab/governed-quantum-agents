@@ -91,10 +91,10 @@ graph TB
 
     subgraph GQA ["⚛️ Venus: Governed Quantum Agents System"]
 
-        LANG["🗣️ Language Interface Agent\nGemini Pro\nIntent parsing & Context"]
+        LANG["🗣️ Language Interface Agent\nConfigurable LLM (e.g. Gemini, OpenAI, Claude)\nIntent parsing & Context"]
         LANG --> PLANNER
 
-        PLANNER["🧠 Planner Agent\nGemini Pro\nGoal decomposition\nStrategy selection"]
+        PLANNER["🧠 Planner Agent\nConfigurable LLM\nGoal decomposition\nStrategy selection"]
 
         PLANNER --> BRIDGE
 
@@ -112,7 +112,7 @@ graph TB
 
         QEX --> INTERP
 
-        INTERP["🔬 Result Interpreter Agent\nGemini Pro\nTranslates bitstring distributions\nback to domain language"]
+        INTERP["🔬 Result Interpreter Agent\nConfigurable LLM\nTranslates bitstring distributions\nback to domain language"]
 
         INTERP --> MEM
 
@@ -121,7 +121,7 @@ graph TB
         MEM -->|"Refined goal"| PLANNER
         MEM --> OUT
 
-        JUDGE["⚖️ LLM-as-Judge Evaluator\nGemini Pro\nGovernance & Output Safety"]
+        JUDGE["⚖️ LLM-as-Judge Evaluator\nConfigurable LLM\nGovernance & Output Safety"]
         INTERP -.->|"Verification"| JUDGE
         JUDGE -.->|"Approved"| OUT
     end
@@ -229,6 +229,11 @@ python src/main.py "Find an optimal alloy with tensile strength above 900 MPa"
 To leverage the **IBM Qiskit** backend for circuit generation and execution, simply pass the `--framework qiskit` flag:
 ```bash
 python src/main.py "Find an optimal alloy with tensile strength above 900 MPa" --framework qiskit
+```
+
+To run the agents using a different primary LLM (e.g. OpenAI GPT-4o, Anthropic Claude 3.5), use the `--model` flag:
+```bash
+python src/main.py "Find candidate molecules that inhibit COX-2" --model openai/gpt-4o
 ```
 
 ### Running Tests

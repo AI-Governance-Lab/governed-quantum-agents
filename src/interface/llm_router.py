@@ -155,8 +155,9 @@ class LLMRouter:
     Retrieves agent-specific LLM configurations from config/llm_routing.yaml
     and creates LLMClient instances.
     """
-    def __init__(self, config_path: str = "config/llm_routing.yaml"):
+    def __init__(self, config_path: str = "config/llm_routing.yaml", override_model: Optional[str] = None):
         self.config_path = config_path
+        self.override_model = override_model
         self.config = self._load_config()
 
     def _load_config(self) -> Dict[str, Any]:
@@ -183,12 +184,17 @@ class LLMRouter:
         """
         Generates an LLMClient wrapper for the specified agent and role from the routing configuration.
         """
-        agents_cfg = self.config.get("agents", {})
-        agent_cfg = agents_cfg.get(agent_name, {})
-        model_name = agent_cfg.get(role)
+        if self.override_model and role == "primary":
+            # Override the primary model with the user-provided model
+            model_name = self.override_model
+            logging.info(f"Overriding primary model for agent '{agent_name}' with '{model_name}'.")
+        else:
+            agents_cfg = self.config.get("agents", {})
+            agent_cfg = agents_cfg.get(agent_name, {})
+            model_name = agent_cfg.get(role)
 
-        if not model_name:
-            logging.warning(f"No model found for agent '{agent_name}' with role '{role}'. Using default 'vertex_ai/gemini-2.5-pro'.")
-            model_name = "vertex_ai/gemini-2.5-pro"
+            if not model_name:
+                logging.warning(f"No model found for agent '{agent_name}' with role '{role}'. Using default 'vertex_ai/gemini-2.5-pro'.")
+                model_name = "vertex_ai/gemini-2.5-pro"
 
         return LLMClient(model_name=model_name, agent_name=agent_name)
