@@ -4,6 +4,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![Cirq](https://img.shields.io/badge/Cirq-Google_Quantum-4285F4?style=flat-square&logo=google&logoColor=white)](https://quantumai.google/cirq)
+[![Qiskit](https://img.shields.io/badge/Qiskit-IBM_Quantum-6929C4?style=flat-square&logo=ibm&logoColor=white)](https://qiskit.org)
 [![Gemini](https://img.shields.io/badge/Vertex_AI-Gemini_2.5_Pro-8B5CF6?style=flat-square&logo=googlecloud&logoColor=white)](https://cloud.google.com/vertex-ai)
 [![LiteLLM](https://img.shields.io/badge/Routing-LiteLLM-4A90E2?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-Apache_2.0-22C55E?style=flat-square)](LICENSE)
@@ -183,7 +184,7 @@ The Planner Agent breaks the goal into subproblems mapped to quantum algorithms:
 | Classification | **QSVM** | Toxicity prediction |
 
 ### Step 3 — Quantum Circuit Execution
-Circuits are built via **Google Cirq** and executed on scalable cloud infrastructure or local servers. The architecture is designed for seamless migration to real quantum backends (IonQ, Google Sycamore) as they mature.
+Circuits are dynamically built and executed. With our **Backend-Agnostic architecture**, Venus supports generating both **Google Cirq** and **IBM Qiskit** circuits on the fly, allowing for execution on local simulators (`cirq.Simulator`, `qiskit_aer.AerSimulator`) or seamless cloud execution on real quantum hardware like IBM Quantum or Google Sycamore.
 
 ### Step 4 — Result Interpretation & Memory
 Raw quantum output (probability distributions over bitstrings) is meaningless without context. The Interpreter Agent translates these back into domain language. Every run is stored in a vector database, allowing the agents to build a map of the discovery space across sessions—refining hypotheses and avoiding dead ends.
@@ -220,9 +221,14 @@ Before any result is presented to the user, an independent `Judge Agent` evaluat
    ```
 
 ### Running a Discovery Goal
-To execute a discovery goal, pass the natural language goal as a positional argument:
+To execute a discovery goal, pass the natural language goal as a positional argument. By default, Venus uses the Google Cirq backend.
 ```bash
 python src/main.py "Find an optimal alloy with tensile strength above 900 MPa"
+```
+
+To leverage the **IBM Qiskit** backend for circuit generation and execution, simply pass the `--framework qiskit` flag:
+```bash
+python src/main.py "Find an optimal alloy with tensile strength above 900 MPa" --framework qiskit
 ```
 
 ### Running Tests
@@ -318,13 +324,22 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 
 ---
 
+## 🤝 Unitary Fund
+
+Venus (GQA) is applying for a **Unitary Fund** microgrant! This grant will help us fund our open-source milestones:
+1. Enhancing the multi-backend execution capabilities (expanding Qiskit physical hardware support).
+2. Implementing more advanced quantum algorithms within the agent bridge.
+3. Conducting rigorous governance testing (LLM-as-a-judge) in the quantum computational workflow.
+
+---
+
 ## Tech Stack
 
 | Component | Technology |
 |---|---|
 | **Primary Reasoning Engine** | Google Vertex AI (Gemini 2.5 Pro) / Local vLLM / Ollama |
 | **LLM Gateway & Routing** | LiteLLM |
-| **Quantum Execution** | Google Cirq |
+| **Quantum Execution** | Google Cirq / IBM Qiskit (Aer Simulator) |
 | **Quantum Algorithms** | QAOA, VQE, Grover's, QSVM |
 | **Agent Framework** | Python 3.11, asyncio |
 | **Discovery Memory** | FAISS / ChromaDB (Vector Store) |
@@ -344,7 +359,8 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 | **v0.5** | Multi-session discovery memory | ✅ Complete |
 | **v0.6** | Pydantic strict JSON validation & Asyncio Execution Loop | ✅ Complete |
 | **v0.7** | Dynamic Quantum Circuits scaling with Problem Variables | ✅ Complete |
-| **v1.0** | Real quantum hardware backend integration | 📅 Long-term |
+| **v0.8** | **Qiskit Integration** (Multi-backend execution: IBM & Google) | ✅ Complete |
+| **v1.0** | Real quantum hardware backend execution (IBM Quantum / IonQ) | 📅 Long-term |
 
 ---
 

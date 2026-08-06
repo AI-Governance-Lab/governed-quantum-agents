@@ -16,7 +16,7 @@ from quantum.execution import QuantumExecution
 from memory.vector_store import VectorStore
 
 
-async def solve_problem(problem_description: str):
+async def solve_problem(problem_description: str, framework: str = "cirq"):
     """
     This function orchestrates the problem-solving process asynchronously.
     """
@@ -101,14 +101,15 @@ async def solve_problem(problem_description: str):
 
     # Step 3: Quantum Circuit generation
     print("\n[EXECUTION] Step 3: Parametric Circuit Generation...")
-    circuit = circuit_generator.generate_circuit(selected_algorithm, encoded_problem)
-    print("  - Generated Cirq Circuit:")
+    circuit = circuit_generator.generate_circuit(selected_algorithm, encoded_problem, framework)
+    print(f"  - Generated {framework.capitalize()} Circuit:")
     print("-" * 40)
     print(circuit)
     print("-" * 40)
 
     # Step 4: Quantum Execution
-    print("\n[EXECUTION] Step 4: Local Quantum Simulation (cirq.Simulator)...")
+    simulator_name = "qiskit_aer.AerSimulator" if framework == "qiskit" else "cirq.Simulator"
+    print(f"\n[EXECUTION] Step 4: Local Quantum Simulation ({simulator_name})...")
     execution_summary = quantum_execution.execute_circuit(circuit, repetitions=1000)
     if not execution_summary.get("success"):
         logging.error("Quantum simulation failed. Terminating loop.")
@@ -175,18 +176,25 @@ def main():
         type=str,
         help="A natural language description of the problem to solve."
     )
+    parser.add_argument(
+        "--framework",
+        type=str,
+        default="cirq",
+        choices=["cirq", "qiskit"],
+        help="The quantum framework to use for circuit generation and execution."
+    )
     
     args = parser.parse_args()
     
     if args.problem:
-        asyncio.run(solve_problem(args.problem))
+        asyncio.run(solve_problem(args.problem, args.framework))
     else:
         logging.info("No problem description provided. Running in interactive mode.")
         try:
             while True:
                 problem_description = input("\nPlease describe the problem you want to solve (or press Ctrl+C to exit):\n> ")
                 if problem_description.strip():
-                    asyncio.run(solve_problem(problem_description))
+                    asyncio.run(solve_problem(problem_description, args.framework))
                 else:
                     print("Please enter a description.")
         except KeyboardInterrupt:

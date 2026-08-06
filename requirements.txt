@@ -6,3 +6,5 @@ chromadb==0.4.22
 python-dotenv==1.0.0
 pytest==8.0.0
 PyYAML==6.0.1
+qiskit>=1.0.0
+qiskit-aer>=0.14.0
