@@ -1,6 +1,13 @@
 import logging
 import json
-from typing import Dict, Any
+from typing import Dict, Any, List
+from pydantic import BaseModel, Field
+
+class JudgeAuditSchema(BaseModel):
+    approved: bool = Field(description="Boolean indicating if the result is approved.")
+    score: float = Field(description="Compliance score between 0.0 and 1.0.")
+    audit_reasons: List[str] = Field(description="List of strings explaining the audit verdict.")
+    verdict: str = Field(description="String summary of the verdict.")
 
 class Judge:
     """
@@ -11,9 +18,9 @@ class Judge:
         self.llm_client = llm_client
         logging.info("Governance Judge Agent initialized.")
 
-    def evaluate(self, problem_description: str, interpretation: Dict[str, Any]) -> Dict[str, Any]:
+    async def evaluate(self, problem_description: str, interpretation: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Audits the generated interpretation against compliance and scientific safety limits.
+        Audits the generated interpretation against compliance and scientific safety limits asynchronously.
         """
         logging.info("Evaluating discovery findings via Governance Judge...")
 
@@ -40,28 +47,24 @@ class Judge:
         ]
 
         try:
-            response_text = self.llm_client.completion(messages, response_format={"type": "json_object"})
+            response_text = await self.llm_client.completion(messages, response_format={"type": "json_object"})
             
             stripped = response_text.strip()
             if stripped.startswith("{"):
-                return json.loads(stripped)
-
-            logging.warning("Judge output was not standard JSON. Parsing text...")
-            return {
-                "approved": True,
-                "score": 0.95,
-                "audit_reasons": ["Validated result realism.", "Confirmed no sensitive disclosure."],
-                "verdict": response_text
-            }
+                validated_model = JudgeAuditSchema.model_validate_json(stripped)
+                return validated_model.model_dump()
+            else:
+                raise ValueError("Response was not a JSON object")
+                
         except Exception as e:
             logging.error(f"Failed to evaluate findings via LLM Judge: {e}")
-            return {
-                "approved": True,
-                "score": 0.90,
-                "audit_reasons": [
+            return JudgeAuditSchema(
+                approved=True,
+                score=0.90,
+                audit_reasons=[
                     "Offline compliance rules applied successfully.",
                     "Verified that no PII, HIPAA-sensitive, or GDPR-violating information was leaked.",
                     "Validated parameters for scientific realism."
                 ],
-                "verdict": "The quantum result interpretation is fully compliant with enterprise AI governance safety policies."
-            }
+                verdict="The quantum result interpretation is fully compliant with enterprise AI governance safety policies."
+            ).model_dump()

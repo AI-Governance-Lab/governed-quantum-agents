@@ -1,6 +1,10 @@
 import logging
 import json
 from typing import List
+from pydantic import BaseModel, Field
+
+class PlanSchema(BaseModel):
+    plan_steps: List[str] = Field(description="A sequential list of steps to execute.")
 
 class Planner:
     """
@@ -11,9 +15,9 @@ class Planner:
         self.llm_client = llm_client
         logging.info("Planner Agent initialized.")
 
-    def create_plan(self, problem_description: str) -> List[str]:
+    async def create_plan(self, problem_description: str) -> List[str]:
         """
-        Interacts with the LLM client to decompose the discovery goal into steps.
+        Interacts with the LLM client to decompose the discovery goal into steps asynchronously.
         """
         logging.info(f"Generating plan for problem: '{problem_description}'")
         
@@ -26,52 +30,24 @@ class Planner:
             f"Output the steps clearly."
         )
 
+        prompt += "\nOutput your response as a JSON object with a single key 'plan_steps' containing a list of strings."
+
         messages = [
-            {"role": "system", "content": "You are a professional quantum planner agent."},
+            {"role": "system", "content": "You are a professional quantum planner agent. Output only valid JSON."},
             {"role": "user", "content": prompt}
         ]
 
         try:
-            response_text = self.llm_client.completion(messages)
+            response_text = await self.llm_client.completion(messages, response_format={"type": "json_object"})
             
-            # Try to parse if output is formatted as JSON
+            # Validate with Pydantic
             stripped = response_text.strip()
-            if stripped.startswith("{") or stripped.startswith("["):
-                try:
-                    data = json.loads(stripped)
-                    if isinstance(data, dict) and "plan_steps" in data:
-                        return data["plan_steps"]
-                    elif isinstance(data, list):
-                        return data
-                except Exception:
-                    pass
+            if stripped.startswith("{"):
+                validated_model = PlanSchema.model_validate_json(stripped)
+                return validated_model.plan_steps
+            else:
+                raise ValueError("Response was not a JSON object")
 
-            # Otherwise, split by lines and normalize
-            lines = response_text.strip().split("\n")
-            steps = []
-            for line in lines:
-                line_str = line.strip()
-                if line_str:
-                    # Strip bullet points and numbering
-                    if line_str.startswith("- "):
-                        steps.append(line_str[2:].strip())
-                    elif line_str.startswith("* "):
-                        steps.append(line_str[2:].strip())
-                    elif len(line_str) > 2 and line_str[0].isdigit() and line_str[1] in [".", ":"]:
-                        steps.append(line_str[2:].strip())
-                    else:
-                        steps.append(line_str)
-            
-            if not steps:
-                steps = [
-                    "Encode the problem description into classical parameters.",
-                    "Select the most appropriate quantum algorithm (VQE/QAOA/Grover/QSVM).",
-                    "Construct the quantum circuit in Cirq.",
-                    "Execute the circuit on the Simulator.",
-                    "Interpret the resulting quantum bitstrings into physical parameters.",
-                    "Evaluate findings against safety guidelines using the Governance Judge."
-                ]
-            return steps
         except Exception as e:
             logging.error(f"Failed to generate plan via LLM client: {e}")
             return [

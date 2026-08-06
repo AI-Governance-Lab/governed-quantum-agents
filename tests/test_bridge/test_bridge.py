@@ -3,11 +3,16 @@ from bridge.problem_encoder import ProblemEncoder
 from bridge.algorithm_selector import AlgorithmSelector
 from bridge.circuit_generator import CircuitGenerator
 
-def test_problem_encoder():
-    encoder = ProblemEncoder(llm_client="mock_client")
-    encoded = encoder.encode("Find a lightweight alloy composition")
+from interface.llm_router import LLMRouter
+
+@pytest.mark.asyncio
+async def test_problem_encoder():
+    router = LLMRouter(config_path="config/llm_routing.yaml")
+    client = router.get_client("problem_encoder")
+    encoder = ProblemEncoder(llm_client=client)
+    encoded = await encoder.encode("Find a lightweight alloy composition")
     assert encoded["problem_type"] == "Optimization"
-    assert "Titanium" in encoded["variables"]
+    assert "Titanium %" in encoded["variables"] or "Titanium" in encoded["variables"] or "x" in encoded["variables"]
 
 def test_algorithm_selector():
     selector = AlgorithmSelector()

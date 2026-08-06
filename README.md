@@ -156,6 +156,10 @@ graph TD
     end
 ```
 
+**Key Implementations:**
+- **Dynamic Quantum Circuits:** Algorithms (like QAOA and Grover's) dynamically scale the number of qubits based on the problem variables parsed by the LLM.
+- **Asynchronous Execution:** The entire main execution loop and agent calls run asynchronously using `asyncio` to eliminate I/O blocking.
+
 **Why this approach?**
 - **Deterministic Execution:** By using native `asyncio`, the orchestrator behavior is completely transparent, predictable, and easy to debug.
 - **Strict Governance:** Pydantic guarantees that the LLM's raw text output is explicitly coerced into validated JSON schemas. If an LLM hallucinates a missing field or incorrect data type, Pydantic catches and rejects it before it reaches the sensitive quantum execution layer.
@@ -338,6 +342,8 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 | **v0.3** | Governance Evaluator (LLM-as-Judge pipeline) | ✅ Complete |
 | **v0.4** | VQE for molecular simulation in chemistry domain | ✅ Complete |
 | **v0.5** | Multi-session discovery memory | ✅ Complete |
+| **v0.6** | Pydantic strict JSON validation & Asyncio Execution Loop | ✅ Complete |
+| **v0.7** | Dynamic Quantum Circuits scaling with Problem Variables | ✅ Complete |
 | **v1.0** | Real quantum hardware backend integration | 📅 Long-term |
 
 ---

@@ -2,6 +2,7 @@ import argparse
 import logging
 import sys
 import os
+import asyncio
 
 # Import components
 from agents.planner import Planner
@@ -15,9 +16,9 @@ from quantum.execution import QuantumExecution
 from memory.vector_store import VectorStore
 
 
-def solve_problem(problem_description: str):
+async def solve_problem(problem_description: str):
     """
-    This function orchestrates the problem-solving process.
+    This function orchestrates the problem-solving process asynchronously.
     """
     # Handle simple, direct commands before engaging the full agent workflow.
     normalized_problem = problem_description.strip().lower()
@@ -76,7 +77,7 @@ def solve_problem(problem_description: str):
         print("  No previous discovery records found matching this domain. Beginning fresh run.")
 
     # 3. Use the Planner to create a plan
-    plan = planner.create_plan(problem_description)
+    plan = await planner.create_plan(problem_description)
     
     print("\n[INFO] Agent workflow started.")
     print("="*50)
@@ -90,7 +91,7 @@ def solve_problem(problem_description: str):
     
     # Step 1: Classical parameter encoding
     print("\n[EXECUTION] Step 1: Classical Parameter Encoding...")
-    encoded_problem = problem_encoder.encode(problem_description)
+    encoded_problem = await problem_encoder.encode(problem_description)
     print(f"  - Classical Encoding Output: {encoded_problem}")
 
     # Step 2: Quantum Algorithm selection
@@ -119,13 +120,13 @@ def solve_problem(problem_description: str):
 
     # Step 5: Interpretation
     print("\n[EXECUTION] Step 5: Results Translation & Domain Interpretation...")
-    interpretation_findings = interpreter.interpret(execution_summary, selected_algorithm)
+    interpretation_findings = await interpreter.interpret(execution_summary, selected_algorithm)
     print(f"  - Scientific Natural Language Interpretation: {interpretation_findings.get('interpretation')}")
     print(f"  - Estimation Confidence: {interpretation_findings.get('confidence')}")
 
     # Step 6: Governance Audit
     print("\n[EXECUTION] Step 6: AI Governance Safety Audit (LLM-as-Judge)...")
-    judge_findings = judge.evaluate(problem_description, interpretation_findings)
+    judge_findings = await judge.evaluate(problem_description, interpretation_findings)
     print(f"  - Safety Approved: {judge_findings.get('approved')}")
     print(f"  - Compliance Score: {judge_findings.get('score')}")
     print(f"  - Auditor Comments/Reasons:")
@@ -178,14 +179,14 @@ def main():
     args = parser.parse_args()
     
     if args.problem:
-        solve_problem(args.problem)
+        asyncio.run(solve_problem(args.problem))
     else:
         logging.info("No problem description provided. Running in interactive mode.")
         try:
             while True:
                 problem_description = input("\nPlease describe the problem you want to solve (or press Ctrl+C to exit):\n> ")
                 if problem_description.strip():
-                    solve_problem(problem_description)
+                    asyncio.run(solve_problem(problem_description))
                 else:
                     print("Please enter a description.")
         except KeyboardInterrupt:

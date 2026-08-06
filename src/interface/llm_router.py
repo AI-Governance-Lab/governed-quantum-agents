@@ -15,11 +15,13 @@ class LLMClient:
         self.agent_name = agent_name
         logging.info(f"LLMClient initialized for agent '{self.agent_name}' with model '{self.model_name}'")
 
-    def completion(self, messages: List[Dict[str, str]], response_format: Optional[Any] = None) -> str:
+    async def completion(self, messages: List[Dict[str, str]], response_format: Optional[Any] = None) -> str:
         """
-        Executes a chat completion. Uses LiteLLM if active keys are found,
+        Executes a chat completion asynchronously. Uses LiteLLM if active keys are found,
         otherwise redirects to the simulated fallback generator.
         """
+        import asyncio
+        
         has_keys = any(
             os.environ.get(key) for key in [
                 "GEMINI_API_KEY",
@@ -34,7 +36,7 @@ class LLMClient:
             try:
                 import litellm
                 logging.info(f"Routing completion via LiteLLM for {self.agent_name} using model {self.model_name}...")
-                response = litellm.completion(
+                response = await litellm.acompletion(
                     model=self.model_name,
                     messages=messages,
                     response_format=response_format
@@ -43,7 +45,8 @@ class LLMClient:
             except Exception as e:
                 logging.warning(f"LiteLLM completion failed for model {self.model_name}. Falling back to simulation. Error: {e}")
 
-        # If offline/no keys, run high-fidelity domain simulations
+        # If offline/no keys, run high-fidelity domain simulations (simulate slight delay)
+        await asyncio.sleep(0.5)
         return self._generate_simulated_response(messages, response_format)
 
     def _generate_simulated_response(self, messages: List[Dict[str, str]], response_format: Optional[Any] = None) -> str:
