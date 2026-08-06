@@ -294,12 +294,12 @@ Venus is model-agnostic and infrastructure-flexible by design. All LLM calls are
 ### Mode 1: Enterprise Cloud (Default)
 Venus utilizes **Google Cloud Platform (GCP)** and **Vertex AI** as its primary cognitive engine for unmatched reasoning capabilities.
 
-| Agent Role | Primary Model | Fallback Strategy |
+| Agent Role | Primary Model | Fallback / Heavy Strategy |
 |---|---|---|
-| **Language Interface** | `vertex_ai/gemini-2.5-pro` | `groq/llama-3.3-70b` |
-| **Planner Agent** | `vertex_ai/gemini-2.5-pro` | `anthropic/claude-3-5-haiku` |
-| **Interpreter Agent**| `vertex_ai/gemini-2.5-pro` | `gemini/gemini-1.5-flash` |
-| **Governance Judge** | `vertex_ai/gemini-2.5-pro` | `groq/llama-3.3-70b` |
+| **Language Interface** | `vertex_ai/gemini-2.5-pro` | `openai/gpt-4o-mini` / `anthropic/claude-3-7-sonnet` |
+| **Planner Agent** | `vertex_ai/gemini-2.5-pro` | `mistral/mistral-large-latest` / `openai/gpt-4o` |
+| **Interpreter Agent**| `vertex_ai/gemini-2.5-pro` | `gemini/1.5-flash` / `anthropic/claude-3-5-sonnet` |
+| **Governance Judge** | `vertex_ai/gemini-2.5-pro` | `groq/llama-3.3-70b` (Meta) / `openai/o1-preview` |
 
 ### Mode 2: Private Local (Strict Data Residency)
 For organizations with absolute data residency concerns, Venus can run on **local private infrastructure** (e.g., NVIDIA DGX, Dell servers) using local LLMs. In this mode, discovery targets never leave the internal network. We support two local inference engines based on hardware capacity:
@@ -328,7 +328,7 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 
 | Component | Technology |
 |---|---|
-| **Primary Reasoning Engine** | Google Vertex AI (Gemini 2.5 Pro) / Local vLLM / Ollama |
+| **Primary Reasoning Engine** | Google Gemini Pro (Default) / OpenAI / Anthropic / Mistral / Meta Llama |
 | **LLM Gateway & Routing** | LiteLLM |
 | **Quantum Execution** | Google Cirq / IBM Qiskit (Aer Simulator) |
 | **Quantum Algorithms** | QAOA, VQE, Grover's, QSVM |
