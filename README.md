@@ -246,51 +246,43 @@ pytest
 
 ---
 
-## Enterprise Readiness & ROI
+## Community & Academic Impact
 
-Venus is designed for management and executive stakeholders who require strict oversight, budget controls, and measurable ROI from AI investments. 
+Venus is designed to democratize quantum computing, breaking down the mathematical barriers for students, researchers, and open-source developers.
 
-### 1. AI FinOps & Cost Management
-Running hybrid quantum-classical workloads can be expensive. By routing all agentic LLM calls through **LiteLLM**, Venus provides built-in **FinOps capabilities**:
-* **Cost-per-Discovery Tracking**: Quantify the exact API and compute cost for every successful discovery.
-* **Budget Caps**: Prevent budget overruns by setting hard limits on token usage and cloud API spend per project or department.
+### 1. Research Budget Management
+Running hybrid quantum-classical workloads can be expensive for university departments. By routing all agentic LLM calls through **LiteLLM**, Venus provides built-in budget controls:
+* **Cost-per-Discovery Tracking**: Quantify the exact API and compute cost for every successful simulation.
+* **Grant Budget Caps**: Prevent overruns by setting hard limits on token usage and cloud API spend per research project.
 
-### 2. Immutable Audit Trails & Compliance
-For heavily regulated industries (Pharma, Finance, Defense), the **LLM-as-Judge** evaluator ensures compliance by generating an **immutable audit log** for every decision. This provides end-to-end traceability of how a molecule was selected or a route was optimized, accelerating FDA, HIPAA, or SOC2 compliance reviews.
+### 2. Reproducible Science & Open Data
+For the academic community, transparency is critical. The internal **LLM-as-Judge** evaluator acts as a peer-reviewer, generating an **immutable audit log** for every decision. This provides end-to-end traceability of how a molecule was selected or why a quantum circuit was designed in a specific way, ensuring experiments are fully reproducible.
 
-### 3. Role-Based Access Control (RBAC)
-Venus supports enterprise organizational structures:
-* **Scientists / Researchers**: Initiate discovery goals and interact with the results.
-* **Governance Officers**: Define the safety guidelines, scientific bounds, and review the audit logs.
-* **FinOps Administrators**: Control the hardware routing rules (e.g., forcing local NVIDIA vLLM execution when cloud API budgets are exhausted).
+### 3. Open-Source Collaboration
+Venus is built for collaborative science:
+* **Domain Scientists**: Can run quantum simulations using only natural language, without needing to learn Qiskit or Cirq APIs.
+* **Quantum Physicists**: Can easily plug in new algorithm architectures into the `Classical-Quantum Bridge`.
+* **AI Researchers**: Can swap the intelligence models instantly using the `--model` flag to experiment with new open-source models like Meta Llama or Mistral.
 
 ---
 
 ## Use Cases
 
-**🛡️ Cybersecurity & Threat Intelligence** *(High Demand)*
-> *"Analyze our global network logs to identify zero-day threat patterns and advanced persistent threats (APTs) hiding in the noise."*
-> **Execution:** Utilizes Grover's Algorithm to search massive, unstructured log databases exponentially faster than classical SIEM tools. The Governance Judge ensures no sensitive PII/IP is leaked during the analysis.
-
-**💹 Financial Risk & Fraud Detection** *(High Demand)*
-> *"Optimize our high-frequency trading portfolio to minimize risk against sudden macroeconomic shocks, while identifying complex, multi-layered fraud rings."*
-> **Execution:** Maps risk factors to QAOA for combinatorial optimization. Strict RBAC and audit trails ensure the models comply with SEC/FINRA financial regulations.
-
 **🌍 Climate Tech & Carbon Capture**
 > *"Discover novel Metal-Organic Frameworks (MOFs) that maximize CO2 absorption at room temperature."*
-> **Execution:** VQE (Variational Quantum Eigensolver) simulates the molecular ground states. The LLM-as-a-Judge verifies the scientific validity against known thermodynamics before presenting the candidate.
+> **Execution:** VQE (Variational Quantum Eigensolver) simulates the molecular ground states. The Governance Judge verifies the scientific validity against known thermodynamics before presenting the candidate.
 
 **💊 Pharmaceutical Discovery**
-> *"Find candidate molecules that could inhibit COX-2 with fewer GI side effects than current NSAIDs."*
-> **Execution:** Maps to a VQE circuit, simulates ground state energies, returns ranked compounds validated by the Governance Judge.
+> *"Find candidate molecules that could inhibit COX-2 with minimal off-target effects."*
+> **Execution:** Maps to a VQE circuit, simulates ground state energies, and returns ranked compounds, accelerating the early stages of drug discovery.
 
 **🔬 Materials Science**
-> *"Find a lightweight alloy composition with tensile strength above 900 MPa and corrosion resistance suitable for marine environments."*
-> **Execution:** Encodes multi-objective optimization as a QAOA problem, searching compositional spaces exponentially faster.
+> *"Find a lightweight alloy composition with tensile strength above 900 MPa and high corrosion resistance."*
+> **Execution:** Encodes multi-objective optimization as a QAOA problem, allowing researchers to search compositional spaces exponentially faster than classical brute-force methods.
 
-**📦 Logistics & Operations**
-> *"Optimize our 47-location delivery network for minimum fuel cost under strict time-window constraints."*
-> **Execution:** Vehicle routing mapped to QAOA to find near-optimal solutions, ensuring all constraints are strictly validated.
+**🛡️ Cryptography & Computational Search**
+> *"Search large unstructured datasets to find the exact signature of a specific network anomaly."*
+> **Execution:** Utilizes Grover's Algorithm to execute unstructured searches exponentially faster, highlighting quantum advantages in data processing limits.
 
 ---
 
@@ -360,7 +352,8 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 | **v0.6** | Pydantic strict JSON validation & Asyncio Execution Loop | ✅ Complete |
 | **v0.7** | Dynamic Quantum Circuits scaling with Problem Variables | ✅ Complete |
 | **v0.8** | **Qiskit Integration** (Multi-backend execution: IBM & Google) | ✅ Complete |
-| **v1.0** | Real quantum hardware backend execution (IBM Quantum / IonQ) | 📅 Long-term |
+| **v0.9** | **Real Quantum Hardware Backend Execution** (IBM Quantum) | 🎯 **Grant Target (3-6 Months)** |
+| **v1.0** | Community Plugin System for Custom Quantum Algorithms | 📅 Planned |
 
 ---
 
