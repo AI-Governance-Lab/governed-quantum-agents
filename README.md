@@ -5,7 +5,9 @@
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![Cirq](https://img.shields.io/badge/Cirq-Google_Quantum-4285F4?style=flat-square&logo=google&logoColor=white)](https://quantumai.google/cirq)
 [![Qiskit](https://img.shields.io/badge/Qiskit-IBM_Quantum-6929C4?style=flat-square&logo=ibm&logoColor=white)](https://qiskit.org)
-[![Gemini](https://img.shields.io/badge/Vertex_AI-Gemini_2.5_Pro-8B5CF6?style=flat-square&logo=googlecloud&logoColor=white)](https://cloud.google.com/vertex-ai)
+[![OpenAI](https://img.shields.io/badge/LLM-OpenAI_GPT4-412991?style=flat-square&logo=openai&logoColor=white)](https://openai.com)
+[![Anthropic](https://img.shields.io/badge/LLM-Claude_3-D97757?style=flat-square&logo=anthropic&logoColor=white)](https://anthropic.com)
+[![Gemini](https://img.shields.io/badge/LLM-Gemini_2.5_Pro-8B5CF6?style=flat-square&logo=googlecloud&logoColor=white)](https://cloud.google.com/vertex-ai)
 [![LiteLLM](https://img.shields.io/badge/Routing-LiteLLM-4A90E2?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-Apache_2.0-22C55E?style=flat-square)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Active_Research-F59E0B?style=flat-square)]()
@@ -292,38 +294,40 @@ Venus supports enterprise organizational structures:
 
 ---
 
-## Hybrid Infrastructure & LLM Routing
+## 100% LLM-Agnostic & Hybrid Infrastructure
 
-Venus is model-agnostic and infrastructure-flexible by design. All LLM calls are routed through **LiteLLM**—a unified proxy that normalizes 100+ providers into a single API. This allows Venus to operate in two distinct modes depending on enterprise requirements:
+Venus is **completely model-agnostic** by design. All LLM calls are routed through **LiteLLM**—a unified proxy that normalizes 100+ providers into a single API. You can switch the intelligence engine driving the quantum agents at any time using the `--model` command-line flag.
 
-### Mode 1: Enterprise Cloud (Default)
-Venus utilizes **Google Cloud Platform (GCP)** and **Vertex AI** as its primary cognitive engine for unmatched reasoning capabilities.
+This allows Venus to operate in two distinct modes depending on enterprise requirements:
 
-| Agent Role | Primary Model | Fallback / Heavy Strategy |
+### Mode 1: Enterprise Cloud 
+By default, Venus uses Google Gemini 2.5 Pro, but you can seamlessly swap to any major provider.
+
+| Agent Role | Primary Configurable LLM (Examples) | Fallback / Heavy Strategy (Examples) |
 |---|---|---|
-| **Language Interface** | `vertex_ai/gemini-2.5-pro` | `openai/gpt-4o-mini` / `anthropic/claude-3-7-sonnet` |
-| **Planner Agent** | `vertex_ai/gemini-2.5-pro` | `mistral/mistral-large-latest` / `openai/gpt-4o` |
-| **Interpreter Agent**| `vertex_ai/gemini-2.5-pro` | `gemini/1.5-flash` / `anthropic/claude-3-5-sonnet` |
-| **Governance Judge** | `vertex_ai/gemini-2.5-pro` | `groq/llama-3.3-70b` (Meta) / `openai/o1-preview` |
+| **Language Interface** | `vertex_ai/gemini-2.5-pro` (default)<br>`openai/gpt-4o`<br>`anthropic/claude-3-7-sonnet` | `openai/gpt-4o-mini` / `anthropic/claude-3-7-sonnet` |
+| **Planner Agent** | *Configurable via `--model`* | `mistral/mistral-large-latest` / `openai/gpt-4o` |
+| **Interpreter Agent**| *Configurable via `--model`* | `gemini/1.5-flash` / `anthropic/claude-3-5-sonnet` |
+| **Governance Judge** | *Configurable via `--model`* | `groq/llama-3.3-70b` (Meta) / `openai/o1-preview` |
 
 ### Mode 2: Private Local (Strict Data Residency)
-For organizations with absolute data residency concerns, Venus can run on **local private infrastructure** (e.g., NVIDIA DGX, Dell servers) using local LLMs. In this mode, discovery targets never leave the internal network. We support two local inference engines based on hardware capacity:
+For organizations with absolute data residency concerns, Venus can run on **local private infrastructure** (e.g., NVIDIA DGX, Dell servers) using local open-source LLMs. In this mode, discovery targets never leave the internal network.
 
 #### High-Throughput (NVIDIA A100/H100 + vLLM)
 For enterprise-scale discovery and massive concurrent agent operations, Venus routes to **vLLM** for OpenAI-compatible, high-throughput model serving.
-| Model via vLLM | Size | Best for |
+| Command | Size | Best for |
 |---|---|---|
-| `vllm/meta-llama/Llama-3.3-70B-Instruct` | 70B | Primary planning & governance |
-| `vllm/Qwen/Qwen2.5-Coder-32B-Instruct` | 32B | Complex planning & tool use |
+| `--model vllm/meta-llama/Llama-3.3-70B-Instruct` | 70B | Primary planning & governance |
+| `--model vllm/Qwen/Qwen2.5-Coder-32B-Instruct` | 32B | Complex planning & tool use |
 
 #### Lightweight (CPU/Entry-GPU + Ollama)
 For edge environments or lighter workloads.
-| Model via Ollama | Size | Best for |
+| Command | Size | Best for |
 |---|---|---|
-| `ollama/llama3.3` | 70B | Primary planning & governance |
-| `ollama/llama3.2` | 3B / 1B | Fast intent parsing |
-| `ollama/gemma2` | 27B | Reasoning, result interpretation |
-| `ollama/deepseek-r1` | 14B | Complex planning |
+| `--model ollama/llama3.3` | 70B | Primary planning & governance |
+| `--model ollama/llama3.2` | 3B / 1B | Fast intent parsing |
+| `--model ollama/gemma2` | 27B | Reasoning, result interpretation |
+| `--model ollama/deepseek-r1` | 14B | Complex planning |
 
 LiteLLM handles retries, fallbacks, cost tracking, and provider normalization transparently across all modes and backends.
 
