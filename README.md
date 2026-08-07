@@ -250,15 +250,18 @@ pytest
 
 Venus is designed to democratize quantum computing, breaking down the mathematical barriers for students, researchers, and open-source developers.
 
-### 1. Research Budget Management
+### 1. Interactive Examples (Jupyter Notebooks)
+For the scientific community, researchers are often accustomed to running experiments directly from Jupyter Notebooks. The repository includes an `examples/` directory featuring step-by-step notebooks (e.g., `molecule_discovery.ipynb`) that demonstrate how to directly import the internal `CircuitGenerator` and `QuantumExecution` modules. This allows scientists to visually inspect how the agents translate a problem into a quantum circuit without running the full CLI application.
+
+### 2. Research Budget Management
 Running hybrid quantum-classical workloads can be expensive for university departments. By routing all agentic LLM calls through **LiteLLM**, Venus provides built-in budget controls:
 * **Cost-per-Discovery Tracking**: Quantify the exact API and compute cost for every successful simulation.
 * **Grant Budget Caps**: Prevent overruns by setting hard limits on token usage and cloud API spend per research project.
 
-### 2. Reproducible Science & Open Data
+### 3. Reproducible Science & Open Data
 For the academic community, transparency is critical. The internal **LLM-as-Judge** evaluator acts as a peer-reviewer, generating an **immutable audit log** for every decision. This provides end-to-end traceability of how a molecule was selected or why a quantum circuit was designed in a specific way, ensuring experiments are fully reproducible.
 
-### 3. Open-Source Collaboration
+### 4. Open-Source Collaboration
 Venus is built for collaborative science:
 * **Domain Scientists**: Can run quantum simulations using only natural language, without needing to learn Qiskit or Cirq APIs.
 * **Quantum Physicists**: Can easily plug in new algorithm architectures into the `Classical-Quantum Bridge`.
@@ -354,6 +357,7 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 | **v0.8** | **Qiskit Integration** (Multi-backend execution: IBM & Google) | ✅ Complete |
 | **v0.9** | **Real Quantum Hardware Backend Execution** (IBM Quantum) | 🎯 **Grant Target (3-6 Months)** |
 | **v1.0** | Community Plugin System for Custom Quantum Algorithms | 📅 Planned |
+| **v1.1** | **FastAPI Backend (REST API)** | 🎯 **Grant Target / Milestone** |
 
 ---
 
