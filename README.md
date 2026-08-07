@@ -31,6 +31,7 @@
 - [Project Status & Roadmap](#project-status--roadmap)
 - [Why Now?](#why-now)
 - [Relationship to AI Governance Lab](#relationship-to-ai-governance-lab)
+- [🧪 Interactive Examples (Jupyter Notebooks)](#-interactive-examples-jupyter-notebooks)
 
 ---
 
@@ -250,9 +251,6 @@ pytest
 
 Venus is designed to democratize quantum computing, breaking down the mathematical barriers for students, researchers, and open-source developers.
 
-### 1. Interactive Examples (Jupyter Notebooks)
-For the scientific community, researchers are often accustomed to running experiments directly from Jupyter Notebooks. The repository includes an `examples/` directory featuring step-by-step notebooks (e.g., `molecule_discovery.ipynb`) that demonstrate how to directly import the internal `CircuitGenerator` and `QuantumExecution` modules. This allows scientists to visually inspect how the agents translate a problem into a quantum circuit without running the full CLI application.
-
 ### 2. Research Budget Management
 Running hybrid quantum-classical workloads can be expensive for university departments. By routing all agentic LLM calls through **LiteLLM**, Venus provides built-in budget controls:
 * **Cost-per-Discovery Tracking**: Quantify the exact API and compute cost for every successful simulation.
@@ -370,6 +368,18 @@ Quantum hardware is on an aggressive improvement curve. The systems that will ac
 ## Relationship to AI Governance Lab
 
 Venus (Governed Quantum Agents) is a flagship project under the **AI Governance Lab** umbrella. The internal **LLM-as-Judge evaluation pipeline** used in Venus represents the core philosophy of the Lab: bringing enterprise-grade LLM observability, safety, and strict compliance to the most advanced AI frontiers.
+
+---
+
+## 🧪 Interactive Examples (Jupyter Notebooks)
+
+For the scientific and academic community, researchers are often accustomed to running and documenting experiments directly from Jupyter Notebooks. The repository includes an `examples/` directory featuring step-by-step notebooks that demonstrate how to import the internal `CircuitGenerator` and `QuantumExecution` modules directly. 
+
+This allows scientists to visually inspect how the AI agents translate a natural language problem into a quantum circuit without needing to run the full CLI application.
+
+To showcase our **Backend-Agnostic** capabilities, we provide two separate examples:
+- **`examples/molecule_discovery_google_cirq.ipynb`**: Demonstrates circuit generation and simulation using Google Cirq.
+- **`examples/molecule_discovery_ibm_qiskit.ipynb`**: Demonstrates the exact same workflow but routes the execution through IBM Qiskit and the Aer Simulator.
 
 ---
 
