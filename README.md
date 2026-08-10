@@ -29,6 +29,8 @@
 - [Hybrid Infrastructure & LLM Routing](#hybrid-infrastructure--llm-routing)
 - [Tech Stack](#tech-stack)
 - [Project Status & Roadmap](#project-status--roadmap)
+- [🌐 FastAPI & Docker Deployment](#-fastapi--docker-deployment)
+- [💻 Simulators vs. Real Quantum Hardware](#-simulators-vs-real-quantum-hardware)
 - [Why Now?](#why-now)
 - [Relationship to AI Governance Lab](#relationship-to-ai-governance-lab)
 - [🧪 Interactive Examples (Jupyter Notebooks)](#-interactive-examples-jupyter-notebooks)
@@ -355,7 +357,64 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 | **v0.8** | **Qiskit Integration** (Multi-backend execution: IBM & Google) | ✅ Complete |
 | **v0.9** | **Real Quantum Hardware Backend Execution** (IBM Quantum) | 🎯 **Grant Target (3-6 Months)** |
 | **v1.0** | Community Plugin System for Custom Quantum Algorithms | 📅 Planned |
-| **v1.1** | **FastAPI Backend (REST API)** | 🎯 **Grant Target / Milestone** |
+| **v1.1** | **FastAPI Backend (REST API)** | ✅ Complete |
+
+---
+
+## 🌐 FastAPI & Docker Deployment
+
+Venus comes with a built-in FastAPI REST backend featuring an auto-generated Swagger UI (`/docs`). This makes it trivial to deploy the agents as a microservice in an enterprise environment using Docker.
+
+### Running with Docker (Podman)
+
+1. **Build the Image**
+   ```bash
+   docker build -t governed-quantum-api .
+   ```
+
+2. **Run the Container** (Pass your `.env` file containing your LLM API keys)
+   ```bash
+   docker run -d -p 8000:8000 --env-file .env --name quantum-api governed-quantum-api
+   ```
+
+3. **Access the API**
+   - **Swagger Docs:** `http://localhost:8000/docs`
+   - **Health Check:** `http://localhost:8000/health`
+
+### Example cURL Requests
+
+**1. Solve using Google Cirq Simulator (Default)**
+```bash
+curl -X POST "http://localhost:8000/api/v1/solve" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "problem_description": "Search for the marked element 101 in an unstructured database",
+           "framework": "cirq"
+         }'
+```
+
+**2. Solve using IBM Qiskit Simulator**
+```bash
+curl -X POST "http://localhost:8000/api/v1/solve" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "problem_description": "Find the ground state energy of a simple hydrogen molecule",
+           "framework": "qiskit"
+         }'
+```
+
+---
+
+## 💻 Simulators vs. Real Quantum Hardware
+
+By default, the agents in Venus route your circuits to **local quantum simulators** (either `cirq.Simulator` or `qiskit_aer.AerSimulator` depending on your API request). 
+
+**What is the difference between a simulator and real hardware?**
+1. **Mathematical Perfection (Simulators):** Simulators execute the quantum algorithms in a perfectly noiseless environment. They show you exactly what the math dictates without any interference, which is perfect for algorithmic development.
+2. **Environmental Noise (Real Hardware):** Real quantum computers today operate in the NISQ (Noisy Intermediate-Scale Quantum) era. If you execute a circuit on physical hardware, the results are susceptible to decoherence, gate errors, and read-out errors.
+3. **Scaling Limits:** Simulators are strictly limited by classical RAM. Every additional qubit doubles the required memory, meaning standard simulators max out around 30-40 qubits. Real quantum chips (like IBM Condor) scale to hundreds of physical qubits but are working to overcome the aforementioned noise.
+
+Because Venus is **backend-agnostic**, if you wish to run these agents against real quantum hardware, you simply configure the IBM Qiskit provider in the source code. The agents will automatically package the generated circuit and send it over the cloud to execute on a physical IBM Quantum computer.
 
 ---
 

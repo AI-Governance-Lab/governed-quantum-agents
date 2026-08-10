@@ -22,7 +22,8 @@ RUN pip install --upgrade pip && \
 # Copy the current directory contents into the container
 COPY . /app
 
-# Run the main script by default
-ENTRYPOINT ["python", "src/main.py"]
-# Provide a default command (can be overridden)
-CMD ["--help"]
+# Expose port for FastAPI
+EXPOSE 8000
+
+# Run the FastAPI server by default
+CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8000"]

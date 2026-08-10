@@ -34,7 +34,7 @@ async def solve_problem(problem_description: str, framework: str = "cirq", overr
         except Exception as e:
             logging.error(f"Failed to list files: {e}")
         print("\n[INFO] Direct command execution complete.")
-        return # Exit after handling the direct command
+        return {"status": "direct_command_executed", "files": files if 'files' in locals() else []}
 
     logging.info("Starting the problem-solving process...")
     logging.info(f"Problem: '{problem_description}'")
@@ -44,7 +44,7 @@ async def solve_problem(problem_description: str, framework: str = "cirq", overr
         llm_router = LLMRouter(config_path='config/llm_routing.yaml', override_model=override_model)
     except Exception as e:
         logging.error(f"Failed to initialize LLM Router. Exiting. Error: {e}")
-        return
+        return {"error": f"Failed to initialize LLM Router: {e}"}
 
     # 2. Instantiate agents and components with their respective LLM clients
     planner_client = llm_router.get_client('planner', 'primary')
@@ -54,7 +54,7 @@ async def solve_problem(problem_description: str, framework: str = "cirq", overr
 
     if not all([planner_client, encoder_client, interpreter_client, judge_client]):
         logging.error("Could not get all required clients from the LLM Router. Aborting.")
-        return
+        return {"error": "Could not get all required clients from the LLM Router."}
 
     planner = Planner(llm_client=planner_client)
     problem_encoder = ProblemEncoder(llm_client=encoder_client)
@@ -113,7 +113,7 @@ async def solve_problem(problem_description: str, framework: str = "cirq", overr
     execution_summary = quantum_execution.execute_circuit(circuit, repetitions=1000)
     if not execution_summary.get("success"):
         logging.error("Quantum simulation failed. Terminating loop.")
-        return
+        return {"error": "Quantum simulation failed.", "details": execution_summary}
     print("  - Measurement Statistics (Histograms):")
     print(f"    - Repetitions: {execution_summary.get('repetitions')}")
     print(f"    - Output distributions: {execution_summary.get('bitstring_counts')}")
@@ -152,6 +152,17 @@ async def solve_problem(problem_description: str, framework: str = "cirq", overr
     print("\n" + "=" * 50)
     print("⚛️ VENUS GOVERNED QUANTUM DISCOVERY PIPELINE COMPLETE ⚛️")
     print("=" * 50)
+
+    return {
+        "plan": plan,
+        "encoded_problem": encoded_problem,
+        "selected_algorithm": selected_algorithm,
+        "circuit": str(circuit),
+        "execution_summary": execution_summary,
+        "interpretation": interpretation_findings,
+        "governance_audit": judge_findings,
+        "saved_to_memory": judge_findings.get("approved", False)
+    }
 
 
 def main():
@@ -193,7 +204,9 @@ def main():
     args = parser.parse_args()
     
     if args.problem:
-        asyncio.run(solve_problem(args.problem, args.framework, args.model))
+        result = asyncio.run(solve_problem(args.problem, args.framework, args.model))
+        if result and "error" in result:
+            sys.exit(1)
     else:
         logging.info("No problem description provided. Running in interactive mode.")
         try:
