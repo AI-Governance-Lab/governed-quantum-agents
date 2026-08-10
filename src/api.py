@@ -62,6 +62,33 @@ async def get_models():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Could not read model configuration: {str(e)}")
 
+@app.get("/api/v1/algorithms")
+async def get_algorithms():
+    """
+    Returns the supported quantum algorithms and frameworks available in the GQA system.
+    """
+    return {
+        "supported_algorithms": [
+            {
+                "name": "QAOA",
+                "description": "Quantum Approximate Optimization Algorithm, ideal for combinatorial optimization problems like routing, scheduling, and materials alloy optimization."
+            },
+            {
+                "name": "VQE",
+                "description": "Variational Quantum Eigensolver, suited for simulating molecular ground states and chemical energies."
+            },
+            {
+                "name": "Grover",
+                "description": "Grover's Algorithm, provides a quadratic speedup for searching unstructured databases or finding specific threat signatures."
+            },
+            {
+                "name": "QSVM",
+                "description": "Quantum Support Vector Machine, used for binary classification tasks such as toxicity prediction."
+            }
+        ],
+        "supported_frameworks": ["cirq", "qiskit"]
+    }
+
 @app.post("/api/v1/solve", response_model=ProblemResponse)
 async def solve(request: ProblemRequest):
     try:
