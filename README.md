@@ -398,9 +398,44 @@ curl -X POST "http://localhost:8000/api/v1/solve" \
 curl -X POST "http://localhost:8000/api/v1/solve" \
      -H "Content-Type: application/json" \
      -d '{
-           "problem_description": "Find the ground state energy of a simple hydrogen molecule",
+           "problem_description": "Find the prime factors of 15",
            "framework": "qiskit"
          }'
+```
+
+**Expected JSON Response (Abridged):**
+```json
+{
+  "plan": [
+    "Step 1: Encode the problem description into classical parameters.",
+    "Step 2: Select the most appropriate quantum algorithm (VQE/QAOA/Grover/QSVM).",
+    "Step 3: Construct the quantum circuit in Cirq.",
+    "Step 4: Execute the circuit on the Simulator.",
+    "Step 5: Interpret the resulting quantum bitstrings into physical parameters.",
+    "Step 6: Evaluate findings against safety guidelines using the Governance Judge."
+  ],
+  "selected_algorithm": "Grover",
+  "circuit": "0: ───H───@───H───X───@───X───H───M('m')───\n          │           │           │\n1: ───H───@───H───X───@───X───H───M────────",
+  "execution_summary": {
+    "success": true,
+    "repetitions": 1000,
+    "dominant_state": "11",
+    "dominant_probability": 1.0
+  },
+  "interpretation": {
+    "interpretation": "The quantum search has converged on the target log entry index. State |11> was measured with 100% probability.",
+    "confidence": 1.0
+  },
+  "governance_audit": {
+    "approved": true,
+    "score": 0.98,
+    "audit_reasons": [
+      "Audited interpretation against toxicity guidelines.",
+      "Verified that no PII, HIPAA-sensitive, or GDPR-violating information was leaked in the output."
+    ],
+    "verdict": "The quantum result interpretation is fully compliant with enterprise AI governance safety policies."
+  }
+}
 ```
 
 ---
