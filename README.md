@@ -115,29 +115,18 @@ Venus is architected as a **five-layer sovereign enterprise platform** combining
 ### 1. How Plain-English Business Goals Map to Quantum Algorithms (Executive Overview)
 
 ```mermaid
-flowchart LR
-    Goal["Plain-English Business Goal<br/>(Typed in React 18 UI)"] --> Encoder["AI Problem Encoder<br/>& Algorithm Selector"]
+graph LR
+    Goal["Plain-English Business Goal"] --> Encoder["AI Problem Encoder and Selector"]
 
-    Encoder -->|"Chemistry & Clean Energy"| VQE["VQE Algorithm<br/>Simulates Molecular Energy"]
-    Encoder -->|"Supply Chain & Logistics"| QAOA["QAOA Algorithm<br/>Optimizes Fleet & Routes"]
-    Encoder -->|"Cybersecurity & Logs"| Grover["Grover Algorithm<br/>Finds Hidden Anomalies"]
-    Encoder -->|"Pharma & Risk Screening"| QSVM["QSVM Algorithm<br/>Classifies Safe vs Toxic"]
+    Encoder -->|Chemistry and Clean Energy| VQE["VQE: Molecular Energy Simulation"]
+    Encoder -->|Supply Chain and Logistics| QAOA["QAOA: Fleet and Route Optimization"]
+    Encoder -->|Cybersecurity and Logs| Grover["Grover: Anomaly Signature Search"]
+    Encoder -->|Pharma and Risk Screening| QSVM["QSVM: Safe vs Toxic Classification"]
 
-    VQE --> OutVQE["Ground State Energy (-1.8572 Ha)<br/>Optimal CO2 Capture Material"]
-    QAOA --> OutQAOA["Lowest-Cost Route Bitstring<br/>94.9% Approximation Ratio"]
-    Grover --> OutGrover["Exact Threat Signature Found<br/>Quadratic Speedup"]
-    QSVM --> OutQSVM["Compound Safety Verdict<br/>93.4% Kernel Alignment"]
-
-    style Goal fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    style Encoder fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    style VQE fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#f8fafc
-    style QAOA fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#f8fafc
-    style Grover fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#f8fafc
-    style QSVM fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#f8fafc
-    style OutVQE fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
-    style OutQAOA fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
-    style OutGrover fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
-    style OutQSVM fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
+    VQE --> OutVQE["Ground State Energy (-1.8572 Ha)"]
+    QAOA --> OutQAOA["Optimal Route (94.9% Ratio)"]
+    Grover --> OutGrover["Threat Signature Found"]
+    QSVM --> OutQSVM["Safety Verdict (93.4% Score)"]
 ```
 
 ---
@@ -145,54 +134,42 @@ flowchart LR
 ### 2. End-to-End Enterprise Quantum & AI Governance Architecture
 
 ```mermaid
-flowchart TB
-    subgraph ClientLayer ["1. User Interface & FastAPI Layer (K3s NodePort 30088)"]
-        UI["React 18 Enterprise Workbench<br/>Executive KPIs & Normal-Words Guide"]
-        ChatUI["Venus Quantum AI Chat<br/>Platform Guide & Run Advisor"]
-        REST["FastAPI v2.0 REST Service<br/>/api/v1/solve & /api/v1/chat"]
+graph TD
+    subgraph ClientLayer["1. User Interface and FastAPI Layer"]
+        UI["React 18 Enterprise Workbench"]
+        ChatUI["Venus Quantum AI Chat"]
+        REST["FastAPI v2.0 REST Service"]
     end
 
-    subgraph AgentLayer ["2. Multi-Agent Cognitive Layer (LiteLLM Gateway)"]
-        Planner["Planner Agent<br/>Gemini 4 Argon"]
-        Encoder["Problem Encoder Agent<br/>Gemini 4 Argon"]
-        Interp["Result Interpreter Agent<br/>Plain-English Translation"]
+    subgraph AgentLayer["2. Multi-Agent Cognitive Layer (LiteLLM)"]
+        Planner["Planner Agent (Gemini 4 Argon)"]
+        Encoder["Problem Encoder (Gemini 4 Argon)"]
+        Interp["Result Interpreter Agent"]
     end
 
-    subgraph QuantumLayer ["3. Quantum Bridge & Dual Simulator Layer (1024 Shots)"]
-        Bridge["Quantum Circuit Generator<br/>VQE, QAOA, Grover, QSVM + OpenQASM 2.0"]
-        CirqSim["Google Cirq Simulator<br/>Ideal & NISQ Noise Mode"]
-        QiskitSim["IBM Qiskit AerSimulator<br/>COBYLA & SPSA Variational Loop"]
+    subgraph QuantumLayer["3. Quantum Bridge and Dual Simulators"]
+        Bridge["Quantum Circuit Generator and OpenQASM 2.0"]
+        CirqSim["Google Cirq Simulator"]
+        QiskitSim["IBM Qiskit AerSimulator"]
     end
 
-    subgraph GovLayer ["4. Independent AI Governance & K3s Storage"]
-        Judge["Independent LLM-as-Judge<br/>Zhipu GLM-5.2 Cross-Model Auditor"]
-        Memory["Discovery Memory PVC<br/>Kubernetes Persistent Volume"]
+    subgraph GovLayer["4. Independent AI Governance and K3s Storage"]
+        Judge["Independent LLM-as-Judge (Zhipu GLM-5.2)"]
+        Memory["Discovery Memory (Kubernetes PVC)"]
     end
 
     UI --> REST
     ChatUI --> REST
-    REST -->|"1. Concurrent Plan & Encode"| Planner
-    REST -->|"1. Concurrent Plan & Encode"| Encoder
+    REST --> Planner
+    REST --> Encoder
     Planner --> Bridge
     Encoder --> Bridge
-    Bridge -->|"Google Cirq"| CirqSim
-    Bridge -->|"IBM Qiskit"| QiskitSim
-    CirqSim -->|"2. Bitstrings & Telemetry"| Interp
-    QiskitSim -->|"2. Bitstrings & Telemetry"| Interp
-    Interp -->|"3. Cross-Model Audit"| Judge
-    Judge -->|"4. Approved Run"| Memory
-
-    style UI fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    style ChatUI fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    style REST fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    style Planner fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc
-    style Encoder fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc
-    style Interp fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc
-    style Bridge fill:#311042,stroke:#d946ef,stroke-width:2px,color:#ffffff
-    style CirqSim fill:#311042,stroke:#d946ef,stroke-width:2px,color:#ffffff
-    style QiskitSim fill:#311042,stroke:#d946ef,stroke-width:2px,color:#ffffff
-    style Judge fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
-    style Memory fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
+    Bridge --> CirqSim
+    Bridge --> QiskitSim
+    CirqSim --> Interp
+    QiskitSim --> Interp
+    Interp --> Judge
+    Judge --> Memory
 ```
 
 ---
@@ -209,16 +186,16 @@ sequenceDiagram
     participant JudgeLLM as Independent GLM-5.2 Judge
     participant Mem as Kubernetes PVC Memory
 
-    User->>UI: 1. Clicks Execute on Plain-English Goal
-    UI->>GenLLM: 2. Concurrent Planner and Problem Encoder
+    User->>UI: Clicks Execute on Plain-English Goal
+    UI->>GenLLM: Concurrent Planner and Problem Encoder
     GenLLM-->>UI: Validated JSON Objective and Variables
-    UI->>QPU: 3. Synthesize Circuit and Run 1024 Quantum Shots
-    QPU-->>UI: Bitstring Probabilities, Energy Curve and OpenQASM 2.0
-    UI->>GenLLM: 4. Translate Quantum Telemetry into Normal Words
+    UI->>QPU: Synthesize Circuit and Run 1024 Quantum Shots
+    QPU-->>UI: Bitstring Probabilities, Energy Curve and OpenQASM
+    UI->>GenLLM: Translate Quantum Telemetry into Normal Words
     GenLLM-->>UI: Plain-English Conclusion and Variable Mapping
-    UI->>JudgeLLM: 5. Audit Raw Quantum Telemetry vs AI Conclusion
+    UI->>JudgeLLM: Audit Raw Quantum Telemetry vs AI Conclusion
     JudgeLLM-->>UI: Governance Score 96/100 and APPROVED Verdict
-    UI->>Mem: 6. Save Verified Discovery to Kubernetes PVC
+    UI->>Mem: Save Verified Discovery to Kubernetes PVC
     UI-->>User: Display KPIs, Charts, Governance Audit and Chat
 ```
 ---
