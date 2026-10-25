@@ -151,23 +151,23 @@ flowchart TB
         Gateway["LiteLLM Gateway (Port 4001)<br/>Gemini 4 Argon • Gemini 3.8 Flash<br/>Zhipu GLM-5.2 • Codestral 2508"]:::infra
     end
 
-    UI --> REST
-    ChatUI --> REST
-    REST -->|1. Concurrent asyncio.gather| Planner
-    REST -->|1. Concurrent asyncio.gather| Encoder
-    Planner <--> Gateway
-    Encoder <--> Gateway
-    Encoder -->|2. Structured Schema| Selector
-    Selector -->|3. Selected Paradigm| CircGen
-    CircGen -->|Framework = cirq| CirqSim
-    CircGen -->|Framework = qiskit| QiskitSim
-    CirqSim -->|4. Bitstrings + Telemetry| Interp
-    QiskitSim -->|4. Bitstrings + Telemetry| Interp
-    Interp <--> Gateway
-    Interp -->|5. Interpretation + Telemetry| Judge
-    Judge <-->|Cross-Model Audit| Gateway
-    Judge -->|6. Approved Discovery| Memory
-    Memory -.->|Historical Context Recall| REST
+    UI -->|"HTTP / JSON"| REST
+    ChatUI -->|"HTTP / JSON"| REST
+    REST -->|"1a. Concurrent Task"| Planner
+    REST -->|"1b. Concurrent Task"| Encoder
+    Planner -->|"LiteLLM API"| Gateway
+    Encoder -->|"LiteLLM API"| Gateway
+    Encoder -->|"2. Validated Schema"| Selector
+    Selector -->|"3. Selected Paradigm"| CircGen
+    CircGen -->|"Framework: Cirq"| CirqSim
+    CircGen -->|"Framework: Qiskit"| QiskitSim
+    CirqSim -->|"4. Bitstrings & Telemetry"| Interp
+    QiskitSim -->|"4. Bitstrings & Telemetry"| Interp
+    Interp -->|"LiteLLM API"| Gateway
+    Interp -->|"5. Findings & Telemetry"| Judge
+    Judge -->|"Cross-Model Audit"| Gateway
+    Judge -->|"6. Approved Discovery"| Memory
+    Memory -.->|"Historical Context Recall"| REST
 ```
 
 ---
@@ -178,30 +178,29 @@ flowchart TB
 sequenceDiagram
     autonumber
     actor User as Business User / Engineer
-    participant UI as React 18 UI & FastAPI
-    participant Mem as Discovery Memory (PVC)
+    participant UI as React 18 UI and FastAPI
+    participant Mem as Discovery Memory PVC
     participant GenLLM as Generator LLM (Gemini 4 Argon)
-    participant Bridge as Quantum Bridge & Compiler
-    participant QPU as Cirq / Qiskit Simulator
+    participant Bridge as Quantum Bridge and Compiler
+    participant QPU as Cirq and Qiskit Simulator
     participant JudgeLLM as Independent Judge (GLM-5.2)
 
-    User->>UI: Clicks Execute (Find MOF ground-state energy for CO2 capture)
+    User->>UI: Clicks Execute (MOF CO2 Capture Goal)
     UI->>Mem: 1. Recall similar historical quantum discoveries
     Mem-->>UI: Returns top-matching verified runs
-    par Concurrent Agent Execution (~35% Faster)
-        UI->>GenLLM: 2a. Planner Agent: Decompose hybrid workflow
-        UI->>GenLLM: 2b. Problem Encoder: Extract objective, variables & constraints
-    end
-    GenLLM-->>UI: Validated Pydantic JSON (ProblemType + Decision Variables)
-    UI->>Bridge: 3. Select Algorithm (VQE / QAOA / Grover / QSVM) & Build Circuit
-    Bridge->>QPU: 4. Execute 1024 Shots + Variational Optimization Loop
-    QPU-->>UI: Bitstring Histogram + Energy Curve + OpenQASM 2.0 + Gate Telemetry
-    UI->>GenLLM: 5. Result Interpreter: Translate telemetry into Normal Words + Variable Map
-    GenLLM-->>UI: Plain-English Executive Conclusion + Confidence Score
-    UI->>JudgeLLM: 6. Cross-Model Audit (Raw Quantum Telemetry vs. Interpreter Claims)
-    JudgeLLM-->>UI: Governance Score (96/100) + 4-Pillar Compliance Verdict (APPROVED)
-    UI->>Mem: Persist approved discovery to Kubernetes PVC (/app/data)
-    UI-->>User: Render Interactive KPIs, Charts, OpenQASM & Venus Quantum AI Chat
+    Note over UI,GenLLM: Stage 2 - Concurrent Agent Execution (asyncio.gather)
+    UI->>GenLLM: 2a. Planner Agent decomposes hybrid workflow
+    UI->>GenLLM: 2b. Problem Encoder extracts objective and variables
+    GenLLM-->>UI: Validated Pydantic JSON (ProblemType and Decision Variables)
+    UI->>Bridge: 3. Select Algorithm (VQE, QAOA, Grover, QSVM) and Build Circuit
+    Bridge->>QPU: 4. Execute 1024 Shots and Variational Optimization Loop
+    QPU-->>UI: Bitstring Histogram, Energy Curve, OpenQASM 2.0 and Telemetry
+    UI->>GenLLM: 5. Result Interpreter translates telemetry into Normal Words
+    GenLLM-->>UI: Plain-English Executive Conclusion and Confidence Score
+    UI->>JudgeLLM: 6. Cross-Model Audit (Raw Quantum Telemetry vs Claims)
+    JudgeLLM-->>UI: Governance Score (96/100) and Compliance Verdict (APPROVED)
+    UI->>Mem: Persist approved discovery to Kubernetes PVC
+    UI-->>User: Render Interactive KPIs, Charts, OpenQASM and Venus Quantum AI Chat
 ```
 
 ---
@@ -214,17 +213,17 @@ flowchart LR
     classDef alg fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#f8fafc
     classDef out fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
 
-    Prompt["Plain-English<br/>Discovery Goal"]:::input --> Encoder["Problem Encoder<br/>& Algorithm Selector"]:::input
+    Prompt["Plain-English<br/>Discovery Goal"]:::input --> Encoder["Problem Encoder<br/>and Algorithm Selector"]:::input
 
-    Encoder -->|Chemistry / Materials<br/>CO2 Capture / Drug Binding| VQE["VQE<br/>UCCSD-Inspired Ansatz<br/>12-Iter COBYLA Loop"]:::alg
-    Encoder -->|Logistics / Fleet Routing<br/>Supply Chain / Alloy Mix| QAOA["QAOA (p=2)<br/>Ising / QUBO Cost<br/>Hamiltonian"]:::alg
-    Encoder -->|Cybersecurity Logs<br/>Zero-Day Signature Search| Grover["Grover Search<br/>Dynamic Phase Oracle<br/>Optimal k_opt Iterations"]:::alg
-    Encoder -->|Toxicity Screening<br/>High-Dim Risk Classification| QSVM["QSVM<br/>2nd-Order Pauli<br/>ZZFeatureMap Kernel"]:::alg
+    Encoder -->|"Chemistry & Materials"| VQE["VQE<br/>UCCSD-Inspired Ansatz<br/>12-Iter COBYLA Loop"]:::alg
+    Encoder -->|"Logistics & Fleet Routing"| QAOA["QAOA (p=2)<br/>Ising & QUBO Cost<br/>Hamiltonian"]:::alg
+    Encoder -->|"Cybersecurity Logs"| Grover["Grover Search<br/>Dynamic Phase Oracle<br/>Optimal Iterations"]:::alg
+    Encoder -->|"Toxicity Screening"| QSVM["QSVM<br/>2nd-Order Pauli<br/>ZZFeatureMap Kernel"]:::alg
 
-    VQE --> OutVQE["Ground State Energy (Ha)<br/>Chemical Accuracy < 1.6 mHa"]:::out
+    VQE --> OutVQE["Ground State Energy (Ha)<br/>Chemical Accuracy Within 1.6 mHa"]:::out
     QAOA --> OutQAOA["Optimal Route Bitstring<br/>94.9% Approximation Ratio"]:::out
-    Grover --> OutGrover["Target State Amplified<br/>O(sqrt(N)) Quadratic Speedup"]:::out
-    QSVM --> OutQSVM["Fidelity Kernel Alignment<br/>Safe vs. Toxic Margin"]:::out
+    Grover --> OutGrover["Target State Amplified<br/>Quadratic Speedup"]:::out
+    QSVM --> OutQSVM["Fidelity Kernel Alignment<br/>Safe vs Toxic Margin"]:::out
 ```
 ---
 
