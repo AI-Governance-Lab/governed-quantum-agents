@@ -9,14 +9,14 @@ Verifies that the microservice is fully responsive and the container is online.
 
 ### 🌐 API Endpoint Metadata
 * **HTTP Method:** `GET`
-* **Request URL:** `http://192.168.5.224:30088/health`
+* **Request URL:** `http://localhost:30088/health`
 * **Response Status Code:** `200`
 
 ---
 
 ### 💻 Live `cURL` Command
 ```bash
-curl -X GET "http://192.168.5.224:30088/health" \
+curl -X GET "http://localhost:30088/health" \
      -H "Content-Type: application/json"
 ```
 
@@ -35,7 +35,7 @@ No request body (GET request)
   "status": "ok",
   "service": "governed-quantum-agents",
   "version": "2.0.0",
-  "litellm_gateway": "http://192.168.7.90:4001/v1"
+  "litellm_gateway": "http://localhost:4001/v1"
 }
 ```
 

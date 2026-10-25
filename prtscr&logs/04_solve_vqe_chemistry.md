@@ -9,14 +9,14 @@ Leverages the Variational Quantum Eigensolver (VQE) through Qiskit to simulate m
 
 ### 🌐 API Endpoint Metadata
 * **HTTP Method:** `POST`
-* **Request URL:** `http://192.168.5.224:30088/api/v1/solve`
+* **Request URL:** `http://localhost:30088/api/v1/solve`
 * **Response Status Code:** `200`
 
 ---
 
 ### 💻 Live `cURL` Command
 ```bash
-curl -X POST "http://192.168.5.224:30088/api/v1/solve" \
+curl -X POST "http://localhost:30088/api/v1/solve" \
      -H "Content-Type: application/json" \
      -d '{
   "problem_description": "Find the ground state energy and molecular configuration of a Metal-Organic Framework for efficient CO2 capture.",

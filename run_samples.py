@@ -4,7 +4,7 @@ import os
 import sys
 
 # Define base URL of the FastAPI server (supports K3s NodePort or localhost)
-BASE_URL = os.environ.get("QUANTUM_API_URL", "http://192.168.5.224:30088")
+BASE_URL = os.environ.get("QUANTUM_API_URL", "http://localhost:30088")
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "prtscr&logs")
 

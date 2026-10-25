@@ -409,16 +409,16 @@ docker save docker.io/library/governed-quantum-agents:lab | sudo k3s ctr images 
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 helm upgrade --install governed-quantum-agents ./helm/governed-quantum-agents \
   -n quantum --create-namespace \
-  --set env.LITELLM_BASE_URL="http://192.168.7.90:4001/v1" \
+  --set env.LITELLM_BASE_URL="http://<LITELLM_GATEWAY_IP>:4001/v1" \
   --set secrets.litellmMasterKey="$LITELLM_MASTER_KEY"
 
 # 3. Verify Pod, Service (NodePort 30088), PVC, and PV
 kubectl get pods,svc,pvc,pv -n quantum -o wide
 ```
 
-- **React 18 Enterprise Workbench UI:** `http://192.168.5.224:30088/`
-- **Interactive Swagger / OpenAPI Docs:** `http://192.168.5.224:30088/docs`
-- **Health & Gateway Liveness:** `http://192.168.5.224:30088/health`
+- **React 18 Enterprise Workbench UI:** `http://<K3S_NODE_IP>:30088/`
+- **Interactive Swagger / OpenAPI Docs:** `http://<K3S_NODE_IP>:30088/docs`
+- **Health & Gateway Liveness:** `http://<K3S_NODE_IP>:30088/health`
 
 ### 2. Running with Docker / Podman (`.env`)
 

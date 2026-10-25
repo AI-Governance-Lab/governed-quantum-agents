@@ -9,14 +9,14 @@ Fetches the currently active model configurations (primary, fallback, heavy) for
 
 ### 🌐 API Endpoint Metadata
 * **HTTP Method:** `GET`
-* **Request URL:** `http://192.168.5.224:30088/api/v1/models`
+* **Request URL:** `http://localhost:30088/api/v1/models`
 * **Response Status Code:** `200`
 
 ---
 
 ### 💻 Live `cURL` Command
 ```bash
-curl -X GET "http://192.168.5.224:30088/api/v1/models" \
+curl -X GET "http://localhost:30088/api/v1/models" \
      -H "Content-Type: application/json"
 ```
 

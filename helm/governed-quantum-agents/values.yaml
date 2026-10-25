@@ -33,7 +33,7 @@ env:
   QUANTUM_API_BIND_IP: "0.0.0.0"
   QUANTUM_API_PORT: "8000"
   DISCOVERY_MEMORY_PATH: "/app/data/discovery_memory.json"
-  LITELLM_BASE_URL: "http://192.168.7.90:4001/v1"
+  LITELLM_BASE_URL: "http://localhost:4001/v1"
 
 secrets:
   # Override at install time via --set secrets.litellmMasterKey=...

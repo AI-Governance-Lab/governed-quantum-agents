@@ -9,14 +9,14 @@ Executes a quadratic speedup unstructured database search utilizing Grover's alg
 
 ### 🌐 API Endpoint Metadata
 * **HTTP Method:** `POST`
-* **Request URL:** `http://192.168.5.224:30088/api/v1/solve`
+* **Request URL:** `http://localhost:30088/api/v1/solve`
 * **Response Status Code:** `200`
 
 ---
 
 ### 💻 Live `cURL` Command
 ```bash
-curl -X POST "http://192.168.5.224:30088/api/v1/solve" \
+curl -X POST "http://localhost:30088/api/v1/solve" \
      -H "Content-Type: application/json" \
      -d '{
   "problem_description": "Search large unstructured datasets to find the exact signature of a specific network anomaly.",
