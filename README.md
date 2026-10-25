@@ -110,90 +110,122 @@ Furthermore, for this translation layer to be adopted by enterprises, it cannot 
 
 ## Architecture
 
-The system acts as a **Quantum-Classical Hybrid Orchestrator**, structured around specialized agents:
+Venus is architected as a **five-layer sovereign enterprise platform** combining a **React 18 Executive Workbench**, **FastAPI Microservice**, **Multi-Agent LiteLLM Orchestration**, **Dual-SDK Quantum Execution (Google Cirq & IBM Qiskit)**, and an **Independent LLM-as-Judge Governance Observatory** deployed on **Kubernetes (K3s) via Helm**.
+
+### 1. End-to-End Enterprise Quantum & AI Governance Topology
 
 ```mermaid
-graph TB
-    USER["🧑 Researcher / Scientist / Engineer\nNatural language discovery goal"]
-    USER -->|"Plain English"| LANG
+flowchart TB
+    classDef ui fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
+    classDef agent fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc
+    classDef bridge fill:#0f172a,stroke:#8b5cf6,stroke-width:2px,color:#f8fafc
+    classDef quantum fill:#311042,stroke:#d946ef,stroke-width:2px,color:#ffffff
+    classDef judge fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
+    classDef infra fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
 
-    subgraph GQA ["⚛️ Venus: Governed Quantum Agents System"]
-
-        LANG["🗣️ Language Interface Agent\nConfigurable LLM (e.g. Gemini, OpenAI, Claude)\nIntent parsing & Context"]
-        LANG --> PLANNER
-
-        PLANNER["🧠 Planner Agent\nConfigurable LLM\nGoal decomposition\nStrategy selection"]
-
-        PLANNER --> BRIDGE
-
-        subgraph BRIDGE ["🔁 Classical–Quantum Bridge"]
-            direction LR
-            PROB["Problem Encoder"]
-            ALG["Algorithm Selector\n(QAOA, VQE, QSVM, Grover)"]
-            CIRC["Circuit Generator\n(Cirq & Qiskit)"]
-            PROB --> ALG --> CIRC
-        end
-
-        BRIDGE --> QEX
-
-        QEX["⚛️ Quantum Execution Layer\nGoogle Cirq / IBM Qiskit Simulators\n& IBM Quantum Hardware"]
-
-        QEX --> INTERP
-
-        INTERP["🔬 Result Interpreter Agent\nConfigurable LLM\nTranslates bitstring distributions\nback to domain language"]
-
-        INTERP --> MEM
-
-        MEM["💾 Discovery Memory\nVector Store (ChromaDB/FAISS)"]
-
-        MEM -->|"Refined goal"| PLANNER
-        MEM --> OUT
-
-        JUDGE["⚖️ LLM-as-Judge Evaluator\nConfigurable LLM\nGovernance & Output Safety"]
-        INTERP -.->|"Verification"| JUDGE
-        JUDGE -.->|"Approved"| OUT
+    subgraph ClientLayer["1. Client & API Layer (Port 8000 / K3s NodePort 30088)"]
+        UI["React 18 Enterprise Workbench<br/>Executive KPIs • Normal-Words Guide • Live Timer"]:::ui
+        ChatUI["Venus Quantum AI Chat<br/>Platform Q&A + Active Run Advisor"]:::ui
+        REST["FastAPI v2.0 REST API (/docs)<br/>POST /api/v1/solve • POST /api/v1/chat"]:::ui
     end
 
-    OUT["📋 Human-Readable Output\nRanked discoveries & rationale"]
+    subgraph AgentLayer["2. Multi-Agent Cognitive Layer (Asyncio + Pydantic v2)"]
+        Planner["Planner Agent<br/>Decomposes Scientific Workflow"]:::agent
+        Encoder["Problem Encoder Agent<br/>Extracts Hamiltonian / QUBO Variables"]:::agent
+        Interp["Result Interpreter Agent<br/>Plain-English & Qubit-to-Variable Mapping"]:::agent
+    end
 
-    style GQA fill:#0F0A1A,stroke:#7C3AED,stroke-width:2px
-    style BRIDGE fill:#0D1117,stroke:#3B82F6,stroke-width:1.5px
-    style JUDGE fill:#4A044E,stroke:#EF4444,stroke-width:1.5px
+    subgraph BridgeLayer["3. Quantum Bridge Layer (Deterministic Synthesis)"]
+        Selector["Algorithm Selector<br/>VQE • QAOA • Grover • QSVM"]:::bridge
+        CircGen["Dynamic Circuit Generator<br/>Parameterized Ansatz & Phase Oracles<br/>OpenQASM 2.0 Export"]:::bridge
+    end
+
+    subgraph QuantumLayer["4. Dual-SDK Quantum Execution Layer (1024+ Shots)"]
+        CirqSim["Google Cirq Simulator<br/>Statevector & Density Matrix (NISQ Noise)"]:::quantum
+        QiskitSim["IBM Qiskit AerSimulator<br/>Transpiled Circuits • COBYLA / SPSA Loop"]:::quantum
+    end
+
+    subgraph GovLayer["5. Independent AI Governance & Persistence Layer"]
+        Judge["Independent LLM-as-Judge (GLM-5.2)<br/>4-Pillar Audit: Faithfulness • Math Sanity<br/>GDPR/HIPAA • NISQ Gate Feasibility"]:::judge
+        Memory[("Discovery Memory (K3s PVC)<br/>local-path StorageClass • /app/data")]:::infra
+        Gateway["LiteLLM Gateway (Port 4001)<br/>Gemini 4 Argon • Gemini 3.8 Flash<br/>Zhipu GLM-5.2 • Codestral 2508"]:::infra
+    end
+
+    UI --> REST
+    ChatUI --> REST
+    REST -->|1. Concurrent asyncio.gather| Planner
+    REST -->|1. Concurrent asyncio.gather| Encoder
+    Planner <--> Gateway
+    Encoder <--> Gateway
+    Encoder -->|2. Structured Schema| Selector
+    Selector -->|3. Selected Paradigm| CircGen
+    CircGen -->|Framework = cirq| CirqSim
+    CircGen -->|Framework = qiskit| QiskitSim
+    CirqSim -->|4. Bitstrings + Telemetry| Interp
+    QiskitSim -->|4. Bitstrings + Telemetry| Interp
+    Interp <--> Gateway
+    Interp -->|5. Interpretation + Telemetry| Judge
+    Judge <-->|Cross-Model Audit| Gateway
+    Judge -->|6. Approved Discovery| Memory
+    Memory -.->|Historical Context Recall| REST
 ```
 
-### Bloat-Free Software Stack
+---
 
-To ensure strict enterprise governance and performance, Venus avoids heavy abstraction frameworks (like LangChain or AutoGen) in favor of a lean, deterministic software stack:
+### 2. 6-Stage Governed Quantum Discovery & Cross-Model Audit Sequence
 
 ```mermaid
-graph TD
-    subgraph "Software Architecture"
-        A["<b>Python Asyncio Event Loop</b><br/>Orchestrates non-blocking parallel tasks"]
-        
-        B["<b>Pydantic (v2)</b><br/>Enforces strict I/O schemas & data validation"]
-        
-        C["<b>LiteLLM Gateway</b><br/>Normalized routing, fallbacks & FinOps tracking"]
-        
-        D[("<b>LLMs</b><br/>Gemini / vLLM / Ollama")]
-        
-        A -->|"Constructs request via"| B
-        B -->|"Routes prompt via"| C
-        C -->|"Calls APIs"| D
-        D -->|"Raw Text Output"| C
-        C -->|"Returns to"| B
-        B -->|"Validates schema & returns to"| A
+sequenceDiagram
+    autonumber
+    actor User as Business User / Engineer
+    participant UI as React 18 UI & FastAPI
+    participant Mem as Discovery Memory (PVC)
+    participant GenLLM as Generator LLM (Gemini 4 Argon)
+    participant Bridge as Quantum Bridge & Compiler
+    participant QPU as Cirq / Qiskit Simulator
+    participant JudgeLLM as Independent Judge (GLM-5.2)
+
+    User->>UI: Clicks Execute (Find MOF ground-state energy for CO2 capture)
+    UI->>Mem: 1. Recall similar historical quantum discoveries
+    Mem-->>UI: Returns top-matching verified runs
+    par Concurrent Agent Execution (~35% Faster)
+        UI->>GenLLM: 2a. Planner Agent: Decompose hybrid workflow
+        UI->>GenLLM: 2b. Problem Encoder: Extract objective, variables & constraints
     end
+    GenLLM-->>UI: Validated Pydantic JSON (ProblemType + Decision Variables)
+    UI->>Bridge: 3. Select Algorithm (VQE / QAOA / Grover / QSVM) & Build Circuit
+    Bridge->>QPU: 4. Execute 1024 Shots + Variational Optimization Loop
+    QPU-->>UI: Bitstring Histogram + Energy Curve + OpenQASM 2.0 + Gate Telemetry
+    UI->>GenLLM: 5. Result Interpreter: Translate telemetry into Normal Words + Variable Map
+    GenLLM-->>UI: Plain-English Executive Conclusion + Confidence Score
+    UI->>JudgeLLM: 6. Cross-Model Audit (Raw Quantum Telemetry vs. Interpreter Claims)
+    JudgeLLM-->>UI: Governance Score (96/100) + 4-Pillar Compliance Verdict (APPROVED)
+    UI->>Mem: Persist approved discovery to Kubernetes PVC (/app/data)
+    UI-->>User: Render Interactive KPIs, Charts, OpenQASM & Venus Quantum AI Chat
 ```
 
-**Key Implementations:**
-- **Dynamic Quantum Circuits:** Algorithms (like QAOA and Grover's) dynamically scale the number of qubits based on the problem variables parsed by the LLM.
-- **Asynchronous Execution:** The entire main execution loop and agent calls run asynchronously using `asyncio` to eliminate I/O blocking.
+---
 
-**Why this approach?**
-- **Deterministic Execution:** By using native `asyncio`, the orchestrator behavior is completely transparent, predictable, and easy to debug.
-- **Strict Governance:** Pydantic guarantees that the LLM's raw text output is explicitly coerced into validated JSON schemas. If an LLM hallucinates a missing field or incorrect data type, Pydantic catches and rejects it before it reaches the sensitive quantum execution layer.
-- **Provider Agnostic:** LiteLLM provides a single, unified interface. We can hot-swap Vertex AI for local NVIDIA vLLM nodes in milliseconds without changing any agent logic.
+### 3. Quantum Algorithm Routing & Industry Decision Matrix
 
+```mermaid
+flowchart LR
+    classDef input fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#ffffff
+    classDef alg fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#f8fafc
+    classDef out fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
+
+    Prompt["Plain-English<br/>Discovery Goal"]:::input --> Encoder["Problem Encoder<br/>& Algorithm Selector"]:::input
+
+    Encoder -->|Chemistry / Materials<br/>CO2 Capture / Drug Binding| VQE["VQE<br/>UCCSD-Inspired Ansatz<br/>12-Iter COBYLA Loop"]:::alg
+    Encoder -->|Logistics / Fleet Routing<br/>Supply Chain / Alloy Mix| QAOA["QAOA (p=2)<br/>Ising / QUBO Cost<br/>Hamiltonian"]:::alg
+    Encoder -->|Cybersecurity Logs<br/>Zero-Day Signature Search| Grover["Grover Search<br/>Dynamic Phase Oracle<br/>Optimal k_opt Iterations"]:::alg
+    Encoder -->|Toxicity Screening<br/>High-Dim Risk Classification| QSVM["QSVM<br/>2nd-Order Pauli<br/>ZZFeatureMap Kernel"]:::alg
+
+    VQE --> OutVQE["Ground State Energy (Ha)<br/>Chemical Accuracy < 1.6 mHa"]:::out
+    QAOA --> OutQAOA["Optimal Route Bitstring<br/>94.9% Approximation Ratio"]:::out
+    Grover --> OutGrover["Target State Amplified<br/>O(sqrt(N)) Quadratic Speedup"]:::out
+    QSVM --> OutQSVM["Fidelity Kernel Alignment<br/>Safe vs. Toxic Margin"]:::out
+```
 ---
 
 ## How It Works
