@@ -54,8 +54,8 @@ class ProblemEncoder:
             response_text = await self.llm_client.completion(messages, response_format={"type": "json_object"})
             
             stripped = response_text.strip()
-            if stripped.startswith("{"):
-                # Validate with Pydantic
+            if "{" in stripped and "}" in stripped:
+                stripped = stripped[stripped.find("{"):stripped.rfind("}") + 1]
                 validated_model = EncodedProblemSchema.model_validate_json(stripped)
                 encoded_problem = validated_model.model_dump()
             else:

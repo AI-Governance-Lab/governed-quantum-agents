@@ -4,26 +4,30 @@ from qiskit import QuantumCircuit
 
 def build_qiskit_qsvm_circuit(encoded_problem: Dict[str, Any]) -> QuantumCircuit:
     """
-    Builds a 2-qubit Quantum Support Vector Machine (QSVM) feature map circuit using Qiskit.
+    Builds a 2-qubit 2nd-order Pauli ZZFeatureMap + Quantum Kernel circuit using Qiskit.
     """
-    logging.info("Building QSVM circuit (Qiskit)...")
-    
+    logging.info("Building QSVM ZZFeatureMap Kernel circuit (Qiskit)...")
+
     circuit = QuantumCircuit(2)
+    x0, x1 = 0.85, 0.45
 
-    # 1. Start with a reference state and apply Hadamards
+    # 1. First ZZFeatureMap layer U_Phi(x)
     circuit.h([0, 1])
-
-    # 2. Encode classical features (quantum feature mapping)
-    # E.g., apply parameterized rotation proportional to features
-    circuit.rz(0.6, 0)
-    circuit.rz(0.6, 1)
-    
-    # 3. Apply entanglement to capture correlation features
+    circuit.rz(2 * x0, 0)
+    circuit.rz(2 * x1, 1)
     circuit.cx(0, 1)
-    circuit.rz(0.3, 1)
+    circuit.rz(2 * (3.14159 - x0) * (3.14159 - x1), 1)
+    circuit.cx(0, 1)
 
-    # 4. Measurement
+    # 2. Second ZZFeatureMap entangling layer + variational classifier readout
+    circuit.h([0, 1])
+    circuit.ry(0.52, 0)
+    circuit.ry(-0.38, 1)
+    circuit.cx(0, 1)
+
+    # 3. Measurement
     circuit.measure_all()
 
     logging.info("QSVM circuit (Qiskit) built successfully.")
     return circuit
+

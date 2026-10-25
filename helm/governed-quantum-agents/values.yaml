@@ -1,0 +1,48 @@
+# Default values for governed-quantum-agents (K3s / Kubernetes Enterprise Deployment)
+replicaCount: 1
+
+namespace:
+  create: false
+  name: quantum
+
+image:
+  repository: docker.io/library/governed-quantum-agents
+  tag: "lab"
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 8000
+  targetPort: 8000
+  nodePort: 30088
+
+ingress:
+  enabled: false
+  className: traefik
+  host: quantum.local
+
+persistence:
+  enabled: true
+  storageClass: "local-path"
+  accessMode: ReadWriteOnce
+  size: 2Gi
+  mountPath: /app/data
+  hostSrcPath: "/opt/governed-quantum-agents/src"
+
+env:
+  QUANTUM_API_BIND_IP: "0.0.0.0"
+  QUANTUM_API_PORT: "8000"
+  DISCOVERY_MEMORY_PATH: "/app/data/discovery_memory.json"
+  LITELLM_BASE_URL: "http://192.168.7.90:4001/v1"
+
+secrets:
+  # Override at install time via --set secrets.litellmMasterKey=...
+  litellmMasterKey: "replace_with_your_litellm_master_key"
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 2Gi

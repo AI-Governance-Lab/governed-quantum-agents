@@ -1,37 +1,46 @@
 # config/llm_routing.yaml
+# Routed via LiteLLM Coding & Discovery Gateway (litellm-agents :4001)
 agents:
   language_interface:
-    primary:   "mistral/mistral-large-latest"
-    fallback:  "openai/gpt-4o-mini"
-    heavy:     "anthropic/claude-3-7-sonnet"
+    primary:   "gemini-4-argon"
+    fallback:  "gemini-3.8-flash"
+    heavy:     "glm-5.2"
 
   planner:
-    primary:   "mistral/mistral-large-latest"
-    fallback:  "vertex_ai/gemini-2.5-pro"
-    heavy:     "openai/gpt-4o"
-
-  interpreter:
-    primary:   "mistral/mistral-large-latest"
-    fallback:  "gemini/gemini-1.5-flash"
-    heavy:     "anthropic/claude-3-5-sonnet-latest"
-
-  judge:
-    primary:   "mistral/mistral-large-latest"
-    fallback:  "groq/llama-3.3-70b-versatile" # Meta Llama 3.3
-    heavy:     "openai/o1-preview"
+    primary:   "gemini-4-argon"
+    fallback:  "gemini-3.8-flash"
+    heavy:     "glm-5.2"
 
   problem_encoder:
-    primary:   "mistral/mistral-large-latest"
-    fallback:  "anthropic/claude-3-5-haiku"
+    primary:   "gemini-4-argon"
+    fallback:  "gemini-3.8-flash"
+    heavy:     "codestral-2508"
+
+  interpreter:
+    primary:   "gemini-4-argon"
+    fallback:  "gemini-3.8-flash"
+    heavy:     "gemini-3.1-pro-preview"
+
+  # Independent Model Family for LLM-as-Judge Governance (prevents self-audit bias)
+  judge:
+    primary:   "glm-5.2"
+    fallback:  "gemini-4-argon"
+    heavy:     "nvidia/nemotron-3-ultra-550b-a55b"
 
 routing_rules:
-  provider_preference: ["vertex_ai", "openai", "anthropic", "mistral", "groq", "vllm", "gemini"]
+  gateway: "litellm-agents"
+  available_models:
+    - "gemini-4-argon"
+    - "gemini-3.8-flash"
+    - "glm-5.2"
+    - "gemini-3.1-pro-preview"
+    - "codestral-2508"
+    - "ministral-14b-latest"
+    - "nvidia/nemotron-3-ultra-550b-a55b"
+    - "nvidia/nemotron-3-super-120b-a12b"
+    - "deepseek-ai/deepseek-v4-flash-0731"
+  provider_preference: ["vertex_ai", "mistral", "nvidia", "openrouter"]
   max_cost_per_call_usd: 0.10
   fallback_on_timeout: true
 
-# Example local vLLM fallback configuration for strict data residency:
-#
-# agents:
-#   language_interface:
-#     primary: "vllm/meta-llama/Llama-3.3-70B-Instruct"
-#     fallback: "ollama/llama3.3"
+

@@ -38,15 +38,27 @@ def test_quantum_algorithms_and_execution_cirq():
     qsvm_cir = build_qsvm_circuit(p)
     assert isinstance(qsvm_cir, cirq.Circuit)
     
-    # Test Quantum Execution on Grover
+    # Test Quantum Execution on Grover (with hardware telemetry & NISQ noise)
     exec_layer = QuantumExecution()
-    summary = exec_layer.execute_circuit(grover_cir, repetitions=100)
+    summary = exec_layer.execute_circuit(grover_cir, repetitions=100, algorithm_name="Grover")
     assert summary["success"] is True
     assert summary["repetitions"] == 100
     assert "bitstring_counts" in summary
     assert "dominant_state" in summary
     assert "dominant_probability" in summary
     assert len(summary["dominant_state"]) == 2
+    assert "hardware_telemetry" in summary
+    assert summary["hardware_telemetry"]["num_qubits"] == 2
+    assert summary["hardware_telemetry"]["circuit_depth"] > 0
+    assert "openqasm" in summary["hardware_telemetry"]
+    assert "variational_metrics" in summary
+
+    # Test NISQ noisy execution & VQE variational metrics
+    noisy_vqe = exec_layer.execute_circuit(vqe_cir, repetitions=100, algorithm_name="VQE", noise_level=0.02)
+    assert noisy_vqe["success"] is True
+    assert noisy_vqe["variational_metrics"]["within_chemical_accuracy"] is True
+    assert len(noisy_vqe["variational_metrics"]["convergence_history"]) >= 10
+
 
 
 @pytest.mark.skipif(QuantumCircuit is None, reason="Qiskit is not installed")

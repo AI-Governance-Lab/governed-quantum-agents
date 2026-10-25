@@ -1,0 +1,15 @@
+apiVersion: v2
+name: governed-quantum-agents
+description: Helm chart for Venus — Enterprise AI-Governed Quantum Discovery Workbench (Cirq + Qiskit + LiteLLM + React UI)
+type: application
+version: 2.0.0
+appVersion: "2.0.0"
+keywords:
+  - quantum-computing
+  - ai-governance
+  - qiskit
+  - cirq
+  - litellm
+  - fastapi
+maintainers:
+  - name: Marian Ropota

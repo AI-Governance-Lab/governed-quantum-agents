@@ -3,9 +3,10 @@ import json
 import os
 import sys
 
-# Define base URL of the FastAPI server
-BASE_URL = "http://localhost:8000"
-OUTPUT_DIR = "/root/AI-Governance-Lab/governed-quantum-agents/prtscr&logs"
+# Define base URL of the FastAPI server (supports K3s NodePort or localhost)
+BASE_URL = os.environ.get("QUANTUM_API_URL", "http://192.168.5.224:30088")
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(PROJECT_ROOT, "prtscr&logs")
 
 # Ensure output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)

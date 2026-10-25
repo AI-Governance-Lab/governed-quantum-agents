@@ -9,14 +9,14 @@ Returns the catalog of quantum algorithms dynamically select-able by the system 
 
 ### 🌐 API Endpoint Metadata
 * **HTTP Method:** `GET`
-* **Request URL:** `http://localhost:8000/api/v1/algorithms`
+* **Request URL:** `http://192.168.5.224:30088/api/v1/algorithms`
 * **Response Status Code:** `200`
 
 ---
 
 ### 💻 Live `cURL` Command
 ```bash
-curl -X GET "http://localhost:8000/api/v1/algorithms" \
+curl -X GET "http://192.168.5.224:30088/api/v1/algorithms" \
      -H "Content-Type: application/json"
 ```
 

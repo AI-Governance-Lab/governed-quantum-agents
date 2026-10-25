@@ -1,18 +1,38 @@
-# ⚛️ Venus: Governed Quantum Agents (GQA)
+# ⚛️ Venus: Governed Quantum Agents (GQA) — Enterprise Platform v2.0
 
-**A governed, natural language interface to quantum-powered discovery.**
+**A Governed, Natural-Language Quantum Discovery Platform with React 18 Executive Workbench, Dual-SDK Quantum Execution (Google Cirq & IBM Qiskit), LiteLLM Multi-Agent Routing, and Kubernetes / K3s Helm Deployment.**
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![React](https://img.shields.io/badge/Frontend-React_18_Enterprise_UI-61DAFB?style=flat-square&logo=react&logoColor=black)]()
 [![Cirq](https://img.shields.io/badge/Cirq-Google_Quantum-4285F4?style=flat-square&logo=google&logoColor=white)](https://quantumai.google/cirq)
-[![Qiskit](https://img.shields.io/badge/Qiskit-IBM_Quantum-6929C4?style=flat-square&logo=ibm&logoColor=white)](https://qiskit.org)
-[![OpenAI](https://img.shields.io/badge/LLM-OpenAI_GPT4-412991?style=flat-square&logo=openai&logoColor=white)](https://openai.com)
-[![Anthropic](https://img.shields.io/badge/LLM-Claude_3-D97757?style=flat-square&logo=anthropic&logoColor=white)](https://anthropic.com)
-[![Gemini](https://img.shields.io/badge/LLM-Gemini_2.5_Pro-8B5CF6?style=flat-square&logo=googlecloud&logoColor=white)](https://cloud.google.com/vertex-ai)
-[![LiteLLM](https://img.shields.io/badge/Routing-LiteLLM-4A90E2?style=flat-square)](#)
+[![Qiskit](https://img.shields.io/badge/Qiskit-IBM_Quantum_(Aer)-6929C4?style=flat-square&logo=ibm&logoColor=white)](https://qiskit.org)
+[![Helm](https://img.shields.io/badge/Kubernetes-K3s_%2B_Helm_Chart-0F1689?style=flat-square&logo=helm&logoColor=white)](helm/governed-quantum-agents)
+[![LiteLLM](https://img.shields.io/badge/AI_Gateway-LiteLLM_(Gemini_3.8_%7C_GLM--5.2_%7C_Codestral)-4A90E2?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-Apache_2.0-22C55E?style=flat-square)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Active_Research-F59E0B?style=flat-square)]()
+[![Maintainer](https://img.shields.io/badge/Maintainer-Marian_Ropota_(LinkedIn)-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/marian-rop)
+[![Credly](https://img.shields.io/badge/Certifications-Credly_Verified-FF6B00?style=flat-square&logo=credly)](https://www.credly.com/users/marian-ropota/badges/credly)
 
-> *"Tell the agents what you want to discover. Let them orchestrate the quantum execution safely."*
+> *"Describe your optimization, molecular chemistry, cybersecurity, or risk-classification objective in plain English. Let Governed AI Agents formulate the Hamiltonian, synthesize & execute the quantum circuit, and audit every conclusion for regulatory & scientific compliance."*
+
+---
+
+## 🎯 Executive Value Proposition — For Managers, HR & Quantum/AI Architects
+
+### 👔 For Engineering Managers, CTOs & Enterprise Decision Makers
+- **Bridging the Quantum Talent & Adoption Gap:** Enterprise R&D teams in logistics, clean energy, pharmaceuticals, and cybersecurity can run hybrid quantum-classical workflows (**VQE, QAOA, Grover, QSVM**) through a **business-friendly React 18 Workbench** without writing low-level quantum gate code.
+- **Built-In AI Governance & Regulatory Auditability (`LLM-as-Judge`):** Every quantum simulation output and natural-language interpretation is audited by an independent LLM Judge against **scientific realism, statistical shot significance, and GDPR/HIPAA compliance** before being persisted to Kubernetes PVC storage.
+- **Cloud-Native & Vendor-Agnostic:** Switch seamlessly between **Google Cirq** and **IBM Qiskit** on the quantum layer, and between **Google Vertex AI (Gemini 3.8 Flash, Gemini 3.1 Pro, Zhipu GLM-5.2 1M MaaS)**, **Mistral Codestral**, and **NVIDIA NIM** via the centralized **LiteLLM Gateway (`:4001`)**.
+
+### 🤝 For HR, Talent Acquisition & Hiring Managers (Competency Matrix)
+This repository demonstrates end-to-end ownership across **Quantum Computing, Multi-Agent AI Governance, Full-Stack React/FastAPI Engineering, and Kubernetes/Helm Cloud-Native Operations**:
+
+| Core Enterprise Domain | Concrete Engineering Proof in This Repository | Aligned Senior / Principal Roles |
+|---|---|---|
+| **Quantum Computing & Hybrid Algorithms** | Dual-SDK circuit synthesis (**Google Cirq** & **IBM Qiskit**) for **UCCSD-inspired VQE** (Hartree-Fock $\to$ Ground State energy convergence in Ha), **$p=2$ QAOA Ising QUBO**, **Optimal-$k_{\text{opt}}$ Grover Phase Oracles**, and **2nd-Order Pauli `ZZFeatureMap` QSVM Kernels**, complete with **OpenQASM 2.0 export** & **NISQ Depolarizing Noise simulation**. | *Quantum Software Architect • Hybrid Quantum-AI Engineer* |
+| **Multi-Agent AI & LLM-as-Judge Governance** | Asynchronous Python `asyncio` + **Pydantic v2** schema-enforced agent pipeline (*Planner → Problem Encoder → Circuit Generator → Quantum Executor → Interpreter → Governance Judge*) routed via **LiteLLM Gateway (`litellm-agents`)** with cross-model auditing. | *Principal AI/GenAI Architect • AI Governance & Safety Lead* |
+| **Full-Stack Enterprise Web UI & API** | Built-in **React 18 Enterprise Workbench (`src/static/index.html`)** with 1-click industry scenarios, animated 6-stage pipeline tracker, SVG variational convergence & bitstring histograms, and **FastAPI REST API (`src/api.py`)**. | *Lead AI Product Engineer • Staff Full-Stack AI Engineer* |
+| **Kubernetes (K3s), Helm & DevSecOps** | Production **Helm Chart (`helm/governed-quantum-agents/`)** deploying into a dedicated `quantum` namespace with dynamic `local-path` **PVC/PV storage**, Kubernetes `Secret` injection, `.env` security isolation, and automated `pytest` verification. | *Staff Platform / MLOps / Kubernetes Architect* |
+
 
 ---
 
@@ -358,31 +378,58 @@ LiteLLM handles retries, fallbacks, cost tracking, and provider normalization tr
 | **v0.6** | Pydantic strict JSON validation & Asyncio Execution Loop | ✅ Complete |
 | **v0.7** | Dynamic Quantum Circuits scaling with Problem Variables | ✅ Complete |
 | **v0.8** | **Qiskit Integration** (Multi-backend execution: IBM & Google) | ✅ Complete |
-| **v0.9** | **Real Quantum Hardware Backend Execution** (IBM Quantum) | 🎯 **Grant Target (3-6 Months)** |
-| **v1.0** | Community Plugin System for Custom Quantum Algorithms | 📅 Planned |
 | **v1.1** | **FastAPI Backend (REST API)** | ✅ Complete |
+| **v2.0** | **React 18 Enterprise Workbench UI, Variational Telemetry, OpenQASM 2.0, NISQ Noise & K3s Helm Chart** | ✅ Complete |
+| **v2.1** | **Real Quantum Hardware Backend Execution** (IBM Quantum Cloud QPU) | 🎯 **Grant Target** |
 
 ---
 
-## 🌐 FastAPI & Docker Deployment
+## 🖥️ React 18 Enterprise Workbench & Kubernetes (K3s) Helm Deployment
 
-Venus comes with a built-in FastAPI REST backend featuring an auto-generated Swagger UI (`/docs`). This makes it trivial to deploy the agents as a microservice in an enterprise environment using Docker.
+Venus v2.0 ships with an integrated **React 18 Enterprise Workbench UI** served directly at `/` alongside the FastAPI OpenAPI documentation (`/docs`), plus a production **Kubernetes / K3s Helm Chart** (`helm/governed-quantum-agents/`).
 
-### Running with Docker (Podman)
+### 1. Deploying on Kubernetes / K3s via Helm (`quantum` Namespace)
 
-1. **Build the Image**
+The repository includes a complete Helm chart (`helm/governed-quantum-agents`) featuring:
+- **Dedicated Namespace:** `quantum`
+- **Dynamic Persistent Volume (`PVC` / `PV`):** Uses the `local-path` StorageClass (`2Gi`, `ReadWriteOnce`) mounted at `/app/data/discovery_memory.json` so governance-approved quantum discoveries persist across pod restarts.
+- **Zero-Trust Secret Management:** Injects `LITELLM_MASTER_KEY` via a Kubernetes `Secret` connecting to your centralized **`litellm-agents` Gateway (`:4001`)**.
+- **NodePort Service:** Exposes the React 18 Workbench & FastAPI REST endpoints on NodePort **`30088`** (`http://<K3S_NODE_IP>:30088`).
+
+```bash
+# 1. Build the container image and import into K3s containerd
+docker build -t docker.io/library/governed-quantum-agents:lab .
+docker save docker.io/library/governed-quantum-agents:lab | sudo k3s ctr images import -
+
+# 2. Deploy or upgrade via Helm into the 'quantum' namespace
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+helm upgrade --install governed-quantum-agents ./helm/governed-quantum-agents \
+  -n quantum --create-namespace \
+  --set env.LITELLM_BASE_URL="http://192.168.7.90:4001/v1" \
+  --set secrets.litellmMasterKey="$LITELLM_MASTER_KEY"
+
+# 3. Verify Pod, Service (NodePort 30088), PVC, and PV
+kubectl get pods,svc,pvc,pv -n quantum -o wide
+```
+
+- **React 18 Enterprise Workbench UI:** `http://192.168.5.224:30088/`
+- **Interactive Swagger / OpenAPI Docs:** `http://192.168.5.224:30088/docs`
+- **Health & Gateway Liveness:** `http://192.168.5.224:30088/health`
+
+### 2. Running with Docker / Podman (`.env`)
+
+1. **Configure `.env`** (copied from `.env.example`):
+   ```bash
+   cp .env.example .env
+   # Set QUANTUM_API_PORT=8000, LITELLM_BASE_URL, and LITELLM_MASTER_KEY in .env
+   ```
+2. **Build and Run:**
    ```bash
    docker build -t governed-quantum-api .
-   ```
-
-2. **Run the Container** (Pass your `.env` file containing your LLM API keys)
-   ```bash
    docker run -d -p 8000:8000 --env-file .env --name quantum-api governed-quantum-api
    ```
+3. **Open the React 18 Workbench:** `http://localhost:8000`
 
-3. **Access the API**
-   - **Swagger Docs:** `http://localhost:8000/docs`
-   - **Health Check:** `http://localhost:8000/health`
 
 ### Example cURL Requests
 

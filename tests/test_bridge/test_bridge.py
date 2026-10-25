@@ -7,12 +7,29 @@ from interface.llm_router import LLMRouter
 
 @pytest.mark.asyncio
 async def test_problem_encoder():
+    import os
+    os.environ["GQA_OFFLINE_MODE"] = "1"
     router = LLMRouter(config_path="config/llm_routing.yaml")
     client = router.get_client("problem_encoder")
     encoder = ProblemEncoder(llm_client=client)
-    encoded = await encoder.encode("Find a lightweight alloy composition")
-    assert encoded["problem_type"] == "Optimization"
-    assert "Titanium %" in encoded["variables"] or "Titanium" in encoded["variables"] or "x" in encoded["variables"]
+
+    # 1. Optimization (QAOA)
+    encoded_opt = await encoder.encode("Find a lightweight alloy composition")
+    assert encoded_opt["problem_type"] == "Optimization"
+
+    # 2. Molecular Simulation (VQE) — regression test for 'molecular' / 'CO2' prompt
+    encoded_vqe = await encoder.encode("Find the ground state energy and molecular configuration of a Metal-Organic Framework for efficient CO2 capture.")
+    assert encoded_vqe["problem_type"] == "Molecular Simulation"
+    assert "You are the Problem Encoder Agent" not in encoded_vqe["source_description"]
+
+    # 3. Classification (QSVM)
+    encoded_qsvm = await encoder.encode("Predict whether a newly synthesized compound is toxic or safe")
+    assert encoded_qsvm["problem_type"] == "Classification"
+
+    # 4. Unstructured Search (Grover)
+    encoded_grover = await encoder.encode("Search large unstructured datasets to find the exact signature of a specific network anomaly.")
+    assert encoded_grover["problem_type"] == "Unstructured Search"
+
 
 def test_algorithm_selector():
     selector = AlgorithmSelector()

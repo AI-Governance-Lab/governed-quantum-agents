@@ -9,14 +9,14 @@ Fetches the currently active model configurations (primary, fallback, heavy) for
 
 ### 🌐 API Endpoint Metadata
 * **HTTP Method:** `GET`
-* **Request URL:** `http://localhost:8000/api/v1/models`
+* **Request URL:** `http://192.168.5.224:30088/api/v1/models`
 * **Response Status Code:** `200`
 
 ---
 
 ### 💻 Live `cURL` Command
 ```bash
-curl -X GET "http://localhost:8000/api/v1/models" \
+curl -X GET "http://192.168.5.224:30088/api/v1/models" \
      -H "Content-Type: application/json"
 ```
 
@@ -34,39 +34,48 @@ No request body (GET request)
 {
   "configured_agents": {
     "language_interface": {
-      "primary": "mistral/mistral-large-latest",
-      "fallback": "openai/gpt-4o-mini",
-      "heavy": "anthropic/claude-3-7-sonnet"
+      "primary": "gemini-3.8-flash",
+      "fallback": "ministral-14b-latest",
+      "heavy": "glm-5.2"
     },
     "planner": {
-      "primary": "mistral/mistral-large-latest",
-      "fallback": "vertex_ai/gemini-2.5-pro",
-      "heavy": "openai/gpt-4o"
-    },
-    "interpreter": {
-      "primary": "mistral/mistral-large-latest",
-      "fallback": "gemini/gemini-1.5-flash",
-      "heavy": "anthropic/claude-3-5-sonnet-latest"
-    },
-    "judge": {
-      "primary": "mistral/mistral-large-latest",
-      "fallback": "groq/llama-3.3-70b-versatile",
-      "heavy": "openai/o1-preview"
+      "primary": "gemini-3.8-flash",
+      "fallback": "codestral-2508",
+      "heavy": "glm-5.2"
     },
     "problem_encoder": {
-      "primary": "mistral/mistral-large-latest",
-      "fallback": "anthropic/claude-3-5-haiku"
+      "primary": "gemini-3.8-flash",
+      "fallback": "codestral-2508",
+      "heavy": "gemini-3.1-pro-preview"
+    },
+    "interpreter": {
+      "primary": "gemini-3.8-flash",
+      "fallback": "ministral-14b-latest",
+      "heavy": "gemini-3.1-pro-preview"
+    },
+    "judge": {
+      "primary": "glm-5.2",
+      "fallback": "gemini-3.1-pro-preview",
+      "heavy": "nvidia/nemotron-3-ultra-550b-a55b"
     }
   },
   "routing_rules": {
+    "gateway": "litellm-agents",
+    "available_models": [
+      "gemini-3.8-flash",
+      "gemini-3.1-pro-preview",
+      "glm-5.2",
+      "codestral-2508",
+      "ministral-14b-latest",
+      "nvidia/nemotron-3-ultra-550b-a55b",
+      "nvidia/nemotron-3-super-120b-a12b",
+      "deepseek-ai/deepseek-v4-flash-0731"
+    ],
     "provider_preference": [
       "vertex_ai",
-      "openai",
-      "anthropic",
       "mistral",
-      "groq",
-      "vllm",
-      "gemini"
+      "nvidia",
+      "openrouter"
     ],
     "max_cost_per_call_usd": 0.1,
     "fallback_on_timeout": true

@@ -40,9 +40,10 @@ class Planner:
         try:
             response_text = await self.llm_client.completion(messages, response_format={"type": "json_object"})
             
-            # Validate with Pydantic
+            # Validate with Pydantic (strip markdown fences if present)
             stripped = response_text.strip()
-            if stripped.startswith("{"):
+            if "{" in stripped and "}" in stripped:
+                stripped = stripped[stripped.find("{"):stripped.rfind("}") + 1]
                 validated_model = PlanSchema.model_validate_json(stripped)
                 return validated_model.plan_steps
             else:
