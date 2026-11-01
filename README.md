@@ -522,6 +522,8 @@ Below is the subtitled animated walkthrough (`venus_quantum_demo.gif`) and full-
 <br>
 
 <div align="center">
+  <img src="prtscr%26logs/pictures/venus_quantum_demo-gui1.png" width="47%" style="margin: 8px;" alt="Venus Quantum Studio v2.0 Left+Top Menu UI (Dark/Light Mode)">
+  <img src="prtscr%26logs/pictures/venus_quantum_demo-gui2.png" width="47%" style="margin: 8px;" alt="Venus Quantum Studio v2.0 Multi-Turn 3-Track Copilot & Grouped Judge Analytics">
   <img src="prtscr%26logs/pictures/01_ui_executive_workbench.png" width="47%" style="margin: 8px;" alt="Executive Workbench & Plain-English Controls">
   <img src="prtscr%26logs/pictures/02_ui_live_execution_progress.png" width="47%" style="margin: 8px;" alt="Live Non-Blocking 6-Stage Execution">
   <img src="prtscr%26logs/pictures/03_ui_ai_governance_judge.png" width="47%" style="margin: 8px;" alt="AI Governance & Independent LLM-as-Judge Observatory">
@@ -563,7 +565,7 @@ Venus (`governed-quantum-agents`) is a flagship project under the **AI Governanc
 | AI Governance Lab Repository | Primary Role | K3s / Gateway Port |
 |---|---|---|
 | **1. [`governed-quantum-agents`](https://github.com/AI-Governance-Lab/governed-quantum-agents)** *(This Repo)* | Multi-domain Natural-Language Quantum Discovery Workbench (**Cirq & Qiskit**: VQE, QAOA, Grover, QSVM) with Left+Top SaaS UI, Dark/Light Mode, `<VenusAvatar />` Multi-Turn 3-Track Copilot & LLM-as-Judge Audit. | K3s `NodePort :30088` |
-| **2. [`quantum-biomed-research-engine`](https://github.com/AI-Governance-Lab/quantum-biomed-research-engine)** | Regulated Pharmaceutical R&D, HIPAA PHI Scrubber, 3x Concurrent GxP Judges, Hybrid Quantum VQE Drug Screener (`SMILES` $\to$ $\Delta G$), Clinical Study Grant FinOps & **FDA 21 CFR Part 11** SHA-256 Ledger. | K3s `NodePort :30089` |
+| **2. [`quantum-biomed-research-engine`](https://github.com/AI-Governance-Lab/quantum-biomed-research-engine)** | Regulated Pharmaceutical R&D, HIPAA PHI Scrubber, 3x Concurrent GxP Judges, Hybrid Quantum VQE Drug Screener (`SMILES → ΔG kcal/mol`), Clinical Study Grant FinOps & **FDA 21 CFR Part 11** SHA-256 Ledger. | K3s `NodePort :30089` |
 | **3. [`private-enterprise-ai-hub`](https://github.com/AI-Governance-Lab/private-enterprise-ai-hub)** | Centralized Dual LiteLLM API Gateways (`:4000` & `:4001`) routing Gemini 3.8 Flash, GLM-5.2 1M MaaS, Gemini 4 Argon, Mistral Codestral & NVIDIA NIM, plus Open WebUI (`:8080`). | Gateways `:4000` / `:4001` |
 | **4. [`nvidia-nim-enterprise-patterns`](https://github.com/AI-Governance-Lab/nvidia-nim-enterprise-patterns)** | Terraform GCP Ephemeral Spot L4/T4 GPU VMs (`70.5%` savings) & K3s TensorRT-LLM / NVIDIA NIM inference patterns. | Tier-1 GPU NIM `:8000` |
 
