@@ -9,17 +9,42 @@
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    body { background-color: #070b14; color: #e2e8f0; font-family: Inter, system-ui, -apple-system, sans-serif; }
-    .glass { background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.16); }
-    .glass-card { background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(148, 163, 184, 0.14); }
-    .glow-cyan { box-shadow: 0 0 25px rgba(14, 165, 233, 0.18); }
+    body { background: radial-gradient(circle at 15% 10%, #160f38 0%, #090618 55%, #05030d 100%); color: #f1f5f9; font-family: Inter, system-ui, -apple-system, sans-serif; transition: background 0.25s, color 0.25s; }
+    .glass { background: rgba(22, 16, 52, 0.78); backdrop-filter: blur(16px); border: 1px solid rgba(167, 139, 250, 0.24); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28); }
+    .glass-card { background: rgba(30, 22, 68, 0.62); border: 1px solid rgba(196, 181, 253, 0.16); }
+    .glow-cyan { box-shadow: 0 0 30px rgba(139, 92, 246, 0.22); }
+
+    /* Airy Daylight Pearl-Lavender Light Theme for Venus */
+    body.light-theme, .light-theme .app-shell { background: linear-gradient(135deg, #f8f7ff 0%, #eef2ff 100%) !important; color: #1e1b4b !important; }
+    .light-theme aside { background-color: #ffffff !important; border-color: #ddd6fe !important; box-shadow: 4px 0 24px rgba(99, 102, 241, 0.06); }
+    .light-theme header { background-color: rgba(255, 255, 255, 0.94) !important; border-color: #ddd6fe !important; }
+    .light-theme .glass { background: rgba(255, 255, 255, 0.96) !important; border: 1px solid #c4b5fd !important; box-shadow: 0 6px 20px rgba(99, 102, 241, 0.06); }
+    .light-theme .glass-card { background: #fdfcff !important; border: 1px solid #ddd6fe !important; }
+    .light-theme .text-white { color: #1e1b4b !important; }
+    .light-theme .text-slate-100, .light-theme .text-slate-200 { color: #1e1b4b !important; }
+    .light-theme .text-slate-300 { color: #312e81 !important; }
+    .light-theme .text-slate-400 { color: #4c1d95 !important; }
+    .light-theme .text-cyan-300, .light-theme .text-cyan-200, .light-theme .text-cyan-400 { color: #4f46e5 !important; }
+    .light-theme .text-purple-300, .light-theme .text-purple-200, .light-theme .text-purple-400 { color: #7c3aed !important; }
+    .light-theme .text-emerald-300, .light-theme .text-emerald-200, .light-theme .text-emerald-400 { color: #047857 !important; }
+    .light-theme .text-amber-300, .light-theme .text-amber-200 { color: #b45309 !important; }
+    .light-theme input, .light-theme textarea, .light-theme select, .light-theme pre {
+      background-color: #ffffff !important;
+      color: #1e1b4b !important;
+      border-color: #a5b4fc !important;
+    }
+    .light-theme .bg-slate-900, .light-theme .bg-slate-900\/90, .light-theme .bg-slate-900\/80, .light-theme .bg-slate-900\/60, .light-theme .bg-slate-950, .light-theme .bg-slate-950\/90, .light-theme .bg-slate-950\/80, .light-theme .bg-slate-800 {
+      background-color: #ede9fe !important;
+      color: #1e1b4b !important;
+      border-color: #c4b5fd !important;
+    }
   </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-cyan-500 selection:text-white">
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useRef } = React;
 
     const PRESETS = [
       {
@@ -79,6 +104,83 @@
       { value: "ministral-14b-latest", label: "Mistral Ministral 14B" },
       { value: "nvidia/nemotron-3-ultra-550b-a55b", label: "NVIDIA Nemotron 3 Ultra 550B" }
     ];
+    function VenusAvatar({ size = "md", thinking = false }) {
+      const dims = size === "sm" ? "w-8 h-8" : size === "lg" ? "w-14 h-14" : "w-11 h-11";
+      return (
+        <div className={`relative ${dims} rounded-2xl bg-gradient-to-br from-cyan-500/30 via-blue-600/30 to-purple-500/30 border border-cyan-400/60 flex items-center justify-center shadow-lg shadow-cyan-500/20 shrink-0`}>
+          <svg viewBox="0 0 48 48" className="w-4/5 h-4/5" fill="none">
+            <ellipse cx="24" cy="24" rx="19" ry="7.5" transform="rotate(35 24 24)" stroke="#22d3ee" strokeWidth="1.8" />
+            <ellipse cx="24" cy="24" rx="19" ry="7.5" transform="rotate(-35 24 24)" stroke="#a855f7" strokeWidth="1.8" />
+            <ellipse cx="24" cy="24" rx="19" ry="7.5" transform="rotate(90 24 24)" stroke="#34d399" strokeWidth="1.5" strokeOpacity="0.8" />
+            <circle cx="24" cy="24" r="4.8" fill="#38bdf8" />
+          </svg>
+          <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-slate-950 ${thinking ? "bg-amber-400 animate-ping" : "bg-emerald-400"}`} />
+        </div>
+      );
+    }
+
+    function UserQuantumAvatar() {
+      return (
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-600/40 to-blue-600/40 border border-cyan-400/50 flex items-center justify-center text-base font-bold text-white shadow shrink-0">
+          👩‍💻
+        </div>
+      );
+    }
+
+    function CollapsibleChatSection({ title, borderColor, titleColor, previewText, isOpen, onToggle, onFocusTrack, isFocusedTrack, children }) {
+      const shortPreview = (previewText || "").replace(/\s+/g, " ").trim().slice(0, 120);
+      return (
+        <div
+          onClick={onToggle}
+          className={`cursor-pointer glass-card rounded-xl p-3.5 border-l-4 ${borderColor} hover:bg-slate-900/90 transition space-y-2`}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className={`text-[11px] font-bold uppercase tracking-wider ${titleColor}`}>
+              {title} {isFocusedTrack ? " • 🎯 ACTIVE CONTEXT" : ""}
+            </span>
+            <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
+              {!isFocusedTrack && onFocusTrack && (
+                <button
+                  onClick={onFocusTrack}
+                  className="px-2 py-0.5 rounded bg-cyan-500/20 hover:bg-cyan-500/35 border border-cyan-400/50 text-[10px] font-semibold text-cyan-200"
+                >
+                  🎯 Focus Track
+                </button>
+              )}
+              <button
+                onClick={onToggle}
+                className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 border border-slate-600 text-[10px] font-mono text-cyan-200 shrink-0"
+              >
+                {isOpen ? "− Collapse" : "+ Extend"}
+              </button>
+            </div>
+          </div>
+          {!isOpen ? (
+            <p className="text-xs text-slate-400 truncate">
+              {shortPreview}{shortPreview.length >= 120 ? "..." : ""} <span className="text-cyan-400 font-semibold ml-1">[Click to extend]</span>
+            </p>
+          ) : (
+            <div className="pt-2 border-t border-slate-800/80 space-y-3" onClick={e => e.stopPropagation()}>
+              {children}
+              {onFocusTrack && (
+                <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between gap-2">
+                  <span className="text-[11px] text-slate-400">
+                    Want to continue only in this context with deeper details?
+                  </span>
+                  <button
+                    onClick={onFocusTrack}
+                    className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-[11px] transition shrink-0"
+                  >
+                    🎯 Continue in This Context Only (Deep Dive) ➢
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+
     function ConvergenceChart({ history, metricName, unit }) {
       if (!history || history.length < 2) return null;
       const minVal = Math.min(...history);
@@ -126,7 +228,122 @@
       );
     }
 
+    function VenusTurnBubble({ msg, idx, personaMode, onSelectContextTrack, askCopilot, disabled }) {
+      const effectiveMode = msg.locked_track || personaMode;
+      const [openSections, setOpenSections] = useState({
+        plain: effectiveMode === "plain",
+        sci: effectiveMode === "scientist",
+        steps: effectiveMode === "steps"
+      });
+
+      useEffect(() => {
+        if (personaMode === "plain") setOpenSections({ plain: true, sci: false, steps: false });
+        else if (personaMode === "scientist") setOpenSections({ plain: false, sci: true, steps: false });
+        else if (personaMode === "steps") setOpenSections({ plain: false, sci: false, steps: true });
+      }, [personaMode]);
+
+      const toggleSec = (key) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
+      const allOpen = openSections.plain && openSections.sci && openSections.steps;
+      const toggleAll = () => setOpenSections({ plain: !allOpen, sci: !allOpen, steps: !allOpen });
+
+      const plainText = msg.plain_language_summary || msg.content || "";
+      const sciText = msg.scientific_deep_dive || "";
+      const stepsList = msg.step_by_step_guide || [];
+      const followups = msg.suggested_followups || [];
+
+      return (
+        <div className="flex items-start gap-3">
+          <VenusAvatar size="md" thinking={false} />
+          <div className="flex-1 space-y-2.5 max-w-2xl">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 px-1">
+              <span className="text-cyan-300 font-bold">
+                Venus AI (Turn #{msg.turn_count || idx + 1}) • {msg.model || "gemini-4-argon"} {msg.duration_sec ? `• ⏱️ ${msg.duration_sec}s` : ""}
+              </span>
+              {personaMode === "dual" && sciText && (
+                <button onClick={toggleAll} className="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 border border-slate-700 text-[10px] text-cyan-300">
+                  {allOpen ? "Collapse All 3" : "Extend All 3"}
+                </button>
+              )}
+            </div>
+
+            {(personaMode === "dual" || personaMode === "plain") && plainText && (
+              <CollapsibleChatSection
+                title="1. 👤 Everyday Plain-Language Explanation"
+                borderColor="border-cyan-400"
+                titleColor="text-cyan-300"
+                previewText={plainText}
+                isOpen={openSections.plain || personaMode === "plain"}
+                isFocusedTrack={personaMode === "plain"}
+                onToggle={() => toggleSec("plain")}
+                onFocusTrack={() => onSelectContextTrack("plain", "Please elaborate further in Everyday Plain Language with concrete real-world examples and analogies.")}
+              >
+                <p className="text-xs text-slate-200 whitespace-pre-wrap leading-relaxed">{plainText}</p>
+              </CollapsibleChatSection>
+            )}
+
+            {(personaMode === "dual" || personaMode === "scientist") && sciText && (
+              <CollapsibleChatSection
+                title="2. 🔬 Quantum Scientist & Architect Deep-Dive"
+                borderColor="border-purple-400"
+                titleColor="text-purple-300"
+                previewText={sciText}
+                isOpen={openSections.sci || personaMode === "scientist"}
+                isFocusedTrack={personaMode === "scientist"}
+                onToggle={() => toggleSec("sci")}
+                onFocusTrack={() => onSelectContextTrack("scientist", "Please elaborate in deeper quantum mathematical, circuit gate, and Hamiltonian/QUBO detail.")}
+              >
+                <p className="text-xs text-slate-200 whitespace-pre-wrap leading-relaxed">{sciText}</p>
+              </CollapsibleChatSection>
+            )}
+
+            {(personaMode === "dual" || personaMode === "steps") && stepsList.length > 0 && (
+              <CollapsibleChatSection
+                title={`3. 🧭 Step-by-Step Practical Guide (${stepsList.length} steps)`}
+                borderColor="border-emerald-400"
+                titleColor="text-emerald-300"
+                previewText={stepsList[0]}
+                isOpen={openSections.steps || personaMode === "steps"}
+                isFocusedTrack={personaMode === "steps"}
+                onToggle={() => toggleSec("steps")}
+                onFocusTrack={() => onSelectContextTrack("steps", "Please provide a more detailed step-by-step operational walkthrough of the quantum workbench.")}
+              >
+                <ol className="list-decimal list-inside text-xs text-slate-200 space-y-1.5">
+                  {stepsList.map((st, sIdx) => <li key={sIdx} className="leading-relaxed">{st}</li>)}
+                </ol>
+              </CollapsibleChatSection>
+            )}
+
+            {followups.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {followups.map((fq, fIdx) => (
+                  <button
+                    key={fIdx}
+                    onClick={() => askCopilot(fq)}
+                    disabled={disabled}
+                    className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-500/20 border border-slate-700 hover:border-cyan-400/50 text-[11px] text-cyan-200 transition"
+                  >
+                    ↳ {fq}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
     function App() {
+      const [themeMode, setThemeMode] = useState(() => localStorage.getItem("venus_theme") || "dark");
+      const [personaMode, setPersonaMode] = useState("dual");
+      const chatScrollRef = useRef(null);
+      const chatEndRef = useRef(null);
+
+      useEffect(() => {
+        localStorage.setItem("venus_theme", themeMode);
+        if (themeMode === "light") document.body.classList.add("light-theme");
+        else document.body.classList.remove("light-theme");
+      }, [themeMode]);
+
       const [prompt, setPrompt] = useState(PRESETS[0].prompt);
       const [framework, setFramework] = useState("qiskit");
       const [model, setModel] = useState("");
@@ -193,9 +410,31 @@
         }
       });
       const [memoryList, setMemoryList] = useState([]);
+      const [govAnalytics, setGovAnalytics] = useState(null);
+      const [groupByMode, setGroupByMode] = useState("algorithm");
       const [health, setHealth] = useState({ status: "checking" });
       const [copied, setCopied] = useState(false);
-      const [chatMessages, setChatMessages] = useState([]);
+      const [chatMessages, setChatMessages] = useState([
+        {
+          role: "assistant",
+          turn_count: 1,
+          model: "venus-quantum-copilot",
+          source: "litellm-gateway",
+          plain_language_summary: "👤 Welcome to Venus — Governed Quantum Agents! Describe an optimization, chemistry, cybersecurity, or toxicity problem in plain English. Venus translates your goal into a quantum circuit (Google Cirq or IBM Qiskit), runs 1,024 quantum shots, and uses an independent AI Judge to verify the result.",
+          scientific_deep_dive: "🔬 Principal Quantum Architect Overview: Executes a 6-stage governed pipeline: (1) Vector Store Memory Lookup → (2) AI Planner → (3) Hamiltonian / QUBO Problem Encoder → (4) Parameterized Circuit Generator (VQE, QAOA, Grover, QSVM) → (5) Ideal or NISQ Depolarizing Noise (p=0.03) Simulator → (6) Independent LLM-as-Judge Audit persisted to Kubernetes PVC.",
+          step_by_step_guide: [
+            "Step 1 — Pick a Scenario or Type Your Goal: Select one of the 4 enterprise presets (VQE, QAOA, Grover, QSVM) and click '🚀 Execute Governed Quantum Discovery'.",
+            "Step 2 — Switch Menus Anytime (Runs in Background): While the 6-stage quantum loop executes, freely switch menus in the Left Sidebar and watch the live timer.",
+            "Step 3 — Choose Your Chat Track: Click '+ Extend' or '🎯 Focus Track' on any card above to continue strictly in Plain Language, Scientist, or Step-by-Step mode."
+          ],
+          suggested_followups: [
+            "What can the Venus Governed Quantum Agents framework do for an enterprise?",
+            "Explain Hardware Mode (Ideal Simulator vs. NISQ Noise) and Shots in simple words",
+            "Which quantum algorithms (VQE, QAOA, Grover, QSVM) and business use cases are supported?",
+            "How does the AI Governance & independent LLM-as-Judge architecture prevent hallucinations?"
+          ]
+        }
+      ]);
       const [chatInput, setChatInput] = useState("");
       const [chatLoading, setChatLoading] = useState(false);
       const [elapsedSec, setElapsedSec] = useState(0);
@@ -212,8 +451,30 @@
         6: "Independent LLM-as-Judge (GLM-5.2) auditing telemetry & compliance..."
       };
 
-      const askCopilot = async (questionText) => {
-        const q = (questionText || chatInput).trim();
+      const scrollToChatBottom = () => {
+        [50, 220].forEach(delay => {
+          setTimeout(() => {
+            if (chatScrollRef.current) {
+              chatScrollRef.current.scrollTo({
+                top: chatScrollRef.current.scrollHeight,
+                behavior: "smooth"
+              });
+            }
+            if (chatEndRef.current) {
+              chatEndRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+          }, delay);
+        });
+      };
+
+      useEffect(() => {
+        if (activeTab === "chat") scrollToChatBottom();
+      }, [chatMessages, chatLoading, activeTab]);
+
+      const askCopilot = async (questionText, overrideTrack = null) => {
+        const activeTrack = overrideTrack || personaMode;
+        if (overrideTrack) setPersonaMode(overrideTrack);
+        const q = (questionText !== undefined ? questionText : chatInput).trim();
         if (!q) return;
         const nextHistory = [...chatMessages, { role: "user", content: q }];
         setChatMessages(nextHistory);
@@ -221,46 +482,70 @@
         setChatLoading(true);
         setChatElapsed(0);
         setActiveTab("chat");
+        scrollToChatBottom();
         const cStart = Date.now();
         const cTimer = setInterval(() => {
           setChatElapsed(((Date.now() - cStart) / 1000).toFixed(1));
         }, 100);
         try {
+          const apiHist = nextHistory.slice(0, -1).map(m => ({
+            role: m.role,
+            content: m.role === "user" ? m.content : (m.plain_language_summary || m.content || "")
+          }));
           const res = await fetch("/api/v1/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               question: q,
-              history: nextHistory,
+              history: apiHist,
               context: result,
-              model: model || null
+              model: model || null,
+              persona_mode: activeTrack
             })
           });
           const data = await res.json();
           clearInterval(cTimer);
-          setChatMessages([
-            ...nextHistory,
-            { role: "assistant", content: data.answer || "No response received.", model: data.model, source: data.source }
+          const dur = ((Date.now() - cStart) / 1000).toFixed(1);
+          setChatMessages(prev => [
+            ...prev,
+            {
+              role: "assistant",
+              turn_count: data.turn_count || (prev.length + 1),
+              content: data.answer || "No response received.",
+              plain_language_summary: data.plain_language_summary || data.answer,
+              scientific_deep_dive: data.scientific_deep_dive || "",
+              step_by_step_guide: data.step_by_step_guide || [],
+              suggested_followups: data.suggested_followups || [],
+              locked_track: activeTrack,
+              duration_sec: dur,
+              model: data.model,
+              source: data.source
+            }
           ]);
+          scrollToChatBottom();
         } catch (err) {
           clearInterval(cTimer);
-          setChatMessages([
-            ...nextHistory,
-            { role: "assistant", content: "Could not reach Venus AI Copilot. Please check container status." }
-          ]);
+          setChatMessages(prev => [...prev, { role: "assistant", content: "Could not reach Venus AI Copilot.", plain_language_summary: "Could not reach Venus AI Copilot." }]);
         } finally {
           setChatLoading(false);
         }
       };
 
+      const selectAndContinueInTrack = (trackKey, followUpPrompt) => {
+        setPersonaMode(trackKey);
+        askCopilot(followUpPrompt, trackKey);
+      };
+
       const fetchMemoryAndHealth = async () => {
         try {
-          const [hRes, mRes] = await Promise.all([
+          const [hRes, mRes, gRes] = await Promise.all([
             fetch("/health").then(r => r.json()),
-            fetch("/api/v1/memory?limit=12").then(r => r.json())
+            fetch("/api/v1/memory?limit=25").then(r => r.json()),
+            fetch("/api/v1/governance/analytics").then(r => r.json())
           ]);
           setHealth(hRes);
           if (mRes && mRes.records) setMemoryList(mRes.records);
+          if (gRes && gRes.total_evaluated_runs !== undefined) setGovAnalytics(gRes);
         } catch (e) {
           console.error(e);
         }
@@ -304,12 +589,27 @@
           const ex = data?.execution_summary || {};
           const enc = data?.encoded_problem || {};
           const aud = data?.governance_audit || {};
-          setChatMessages([
+          setChatMessages(prev => [
+            ...prev,
             {
               role: "assistant",
+              turn_count: prev.length + 1,
               model: model || "gemini-4-argon",
               source: "litellm-gateway",
-              content: `✅ Ready to discuss your latest execution!\n\n• Executed Command: "${customPrompt}"\n• Selected Algorithm: ${data?.selected_algorithm || "Quantum"} (${customFw.toUpperCase()})\n• Winning Quantum State: |${ex.dominant_state || "01"}⟩ (${((ex.dominant_probability || 0) * 100).toFixed(1)}% across ${ex.repetitions || shots} shots)\n• Variables Mapped: ${(enc.variables || []).join(", ")}\n• Governance Audit: ${Math.round((aud.score || 0.96) * 100)}/100 (${aud.approved !== false ? "APPROVED" : "FLAGGED"})\n\nClick any of the tailored question ideas above or type your own question below!`
+              duration_sec: totalSec,
+              content: `✅ Completed in ${totalSec}s: "${customPrompt}"`,
+              plain_language_summary: `👤 Quantum Discovery Completed in ${totalSec}s!\n• Executed Command: "${customPrompt}"\n• Selected Algorithm: ${data?.selected_algorithm || "Quantum"} (${customFw.toUpperCase()})\n• Winning Quantum State: |${ex.dominant_state || "01"}⟩ (${((ex.dominant_probability || 0) * 100).toFixed(1)}% across ${ex.repetitions || shots} shots)\n• Governance Audit: ${Math.round((aud.score || 0.96) * 100)}/100 (${aud.approved !== false ? "APPROVED" : "FLAGGED"})`,
+              scientific_deep_dive: `🔬 Telemetry & Convergence: Mapped variables (${(enc.variables || []).join(", ")}) onto ${ex.hardware_telemetry?.num_qubits || 2} qubits (depth=${ex.hardware_telemetry?.circuit_depth || 6}, mode=${ex.hardware_telemetry?.noise_model || "Ideal Simulator"}). Shannon entropy H=${ex.shannon_entropy_bits ?? 0.42} bits.`,
+              step_by_step_guide: [
+                "Click '+ Extend' or '🎯 Focus Track' on any card above to dive deeper into this run.",
+                "Switch to '3. Quantum Circuit & Telemetry' in the Left Sidebar to inspect the OpenQASM 2.0 code and Convergence Chart.",
+                "Switch to '2. AI Governance & LLM-as-Judge' to review the full safety & realism audit."
+              ],
+              suggested_followups: [
+                `Explain in simple words what state |${ex.dominant_state || "01"}⟩ at ${((ex.dominant_probability || 0) * 100).toFixed(1)}% means`,
+                `Detail the ${data?.selected_algorithm || "Quantum"} circuit gates and variational convergence`,
+                `Why did the independent LLM-as-Judge give this run ${Math.round((aud.score || 0.96) * 100)}/100?`
+              ]
             }
           ]);
           fetchMemoryAndHealth();
@@ -333,31 +633,183 @@
       const interp = (result && result.interpretation) || {};
       const encoded = (result && result.encoded_problem) || {};
       const bitstrings = Object.entries(execSummary.bitstring_counts || {}).sort((a, b) => b[1] - a[1]);
+      const biomedWorkbenchUrl = `http://${window.location.hostname || "localhost"}:30089`;
+
+      const NAV_ITEMS = [
+        { id: "executive", icon: "🪐", short: "1. Quantum Discovery Studio", subtitle: "Scenarios, SDK Controls & Results", badge: loading ? `⚡ ${elapsedSec}s` : (result?.selected_algorithm || "VQE"), accent: "from-violet-500 via-purple-500 to-amber-400" },
+        { id: "governance", icon: "🛡️", short: "2. AI Governance & Judge", subtitle: "Independent LLM-as-Judge Audit", badge: `${Math.round((audit.score || 0.96) * 100)}%`, accent: "from-emerald-400 to-teal-500" },
+        { id: "quantum", icon: "⚛️", short: "3. Circuit & Statevector", subtitle: "OpenQASM 2.0 & Convergence", badge: `${telemetry.num_qubits || 2}Q / d=${telemetry.circuit_depth || 6}`, accent: "from-fuchsia-500 to-indigo-500" },
+        { id: "memory", icon: "🗄️", short: "4. Discovery Vault (PVC)", subtitle: "Kubernetes Persistent Memory", badge: `${memoryList.length} saved`, accent: "from-amber-400 to-orange-500" },
+        { id: "chat", icon: "✨", short: "5. Venus Quantum Copilot", subtitle: "Multi-Turn 3-Track Advisor", badge: chatLoading ? `⚡ ${chatElapsed}s` : `${chatMessages.length} turns`, accent: "from-indigo-400 via-purple-500 to-pink-500" }
+      ];
+      const currentNav = NAV_ITEMS.find(n => n.id === activeTab) || NAV_ITEMS[0];
+
       return (
-        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-          <header className="glass rounded-2xl p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 glow-cyan">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-2xl shadow-lg">⚛️</div>
-              <div>
-                <div className="flex items-center gap-2.5">
-                  <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">Venus — Governed Quantum Agents</h1>
-                  <span className="px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Enterprise v2.0</span>
+        <div className={`app-shell min-h-screen flex flex-col lg:flex-row bg-[#090618] text-slate-100 ${themeMode === "light" ? "light-theme" : ""}`}>
+          {/* AIRY LEFT SIDEBAR NAVIGATION */}
+          <aside className="w-full lg:w-80 bg-[#110c29]/95 border-b lg:border-b-0 lg:border-r border-purple-500/20 p-6 flex flex-col justify-between shrink-0">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-900/90 border border-purple-400/35 shadow-lg">
+                <VenusAvatar size="md" thinking={loading || chatLoading} />
+                <div>
+                  <div className="text-[11px] font-mono uppercase tracking-widest text-amber-300">AI-Governance-Lab</div>
+                  <div className="text-base font-extrabold text-white tracking-tight">Venus Quantum Studio</div>
+                  <div className="text-[11px] text-purple-300 font-mono">Cirq • Qiskit • Multi-Agent</div>
                 </div>
-                <p className="text-xs md:text-sm text-slate-400">
-                  Natural-Language Quantum Discovery Workbench • Multi-Agent AI Governance (LLM-as-Judge) • Google Cirq & IBM Qiskit
-                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                <div className="px-2 text-[11px] font-bold uppercase tracking-widest text-purple-300/80">Workbench Navigation</div>
+                {NAV_ITEMS.map(item => {
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        if (item.id === "chat") scrollToChatBottom();
+                      }}
+                      className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-left transition-all ${
+                        isActive
+                          ? `bg-gradient-to-r ${item.accent} text-slate-950 shadow-xl scale-[1.01]`
+                          : "bg-slate-900/55 hover:bg-slate-800/80 text-slate-200 border border-purple-500/15"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="text-xl shrink-0">{item.icon}</span>
+                        <div className="truncate">
+                          <div className={`text-xs font-bold truncate ${isActive ? "text-slate-950" : "text-white"}`}>{item.short}</div>
+                          <div className={`text-[10px] truncate ${isActive ? "text-slate-900/80 font-medium" : "text-slate-400"}`}>{item.subtitle}</div>
+                        </div>
+                      </div>
+                      <span className={`ml-2 px-2.5 py-1 rounded-lg text-[10px] font-mono shrink-0 ${
+                        isActive ? "bg-slate-950/25 text-slate-950 font-bold" : "bg-slate-800 text-purple-200"
+                      }`}>
+                        {item.badge}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-3 text-xs">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-300">Global AI & Explanation Controls</div>
+                <div>
+                  <label className="block text-[11px] text-slate-400 mb-1">LLM Gateway Model (:4001)</label>
+                  <select
+                    value={model}
+                    onChange={e => setModel(e.target.value)}
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-slate-950 border border-cyan-500/40 text-[11px] font-mono text-cyan-200"
+                  >
+                    {MODELS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] text-slate-400 mb-1">Explanation Track Mode</label>
+                  <select
+                    value={personaMode}
+                    onChange={e => setPersonaMode(e.target.value)}
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-slate-950 border border-purple-500/40 text-[11px] font-semibold text-purple-200"
+                  >
+                    <option value="dual">🌍 All 3 Tracks (Preview + Extend Any)</option>
+                    <option value="plain">1. 👤 Everyday Plain-Language Track Only</option>
+                    <option value="scientist">2. 🔬 Quantum Scientist Track Only</option>
+                    <option value="steps">3. 🧭 Step-by-Step Guide Track Only</option>
+                  </select>
+                </div>
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-3 text-xs">
-              <span className="px-3 py-1.5 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                Gateway: {health.litellm_gateway ? "LiteLLM Connected" : "Active"}
-              </span>
-              <a href="/docs" target="_blank" className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-                OpenAPI / Swagger ↗
+            <div className="pt-4 mt-4 border-t border-slate-800/80 space-y-1.5 text-xs">
+              <div className="px-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Connected Lab Links</div>
+              <a href="/docs" target="_blank" className="flex items-center justify-between px-3 py-2 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-200 font-semibold">
+                <span>⚙️ Backend Swagger (/docs)</span>
+                <span>↗</span>
+              </a>
+              <a href={biomedWorkbenchUrl} target="_blank" className="flex items-center justify-between px-3 py-2 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-200 font-semibold">
+                <span>🧬 Quantum BioMed App (:30089)</span>
+                <span>↗</span>
+              </a>
+              <a href="http://localhost:8080" target="_blank" className="flex items-center justify-between px-3 py-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-200 font-semibold">
+                <span>🏢 Private AI Hub (:8080)</span>
+                <span>↗</span>
               </a>
             </div>
-          </header>
+          </aside>
+
+          {/* MAIN WORKSPACE + AIRY TOP MENU BAR */}
+          <div className="flex-1 flex flex-col min-w-0">
+            <header className="bg-[#130d30]/90 border-b border-purple-500/20 px-6 py-4 flex flex-col gap-3 sticky top-0 z-20 backdrop-blur-md">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-3.5">
+                  <span className="text-3xl">{currentNav.icon}</span>
+                  <div>
+                    <div className="text-[11px] font-mono uppercase tracking-widest text-amber-300">
+                      Venus Quantum Discovery Studio • {currentNav.subtitle}
+                    </div>
+                    <h1 className="text-xl md:text-2xl font-extrabold text-white tracking-tight">{currentNav.short}</h1>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2.5 text-xs">
+                  <button
+                    onClick={() => setThemeMode(themeMode === "dark" ? "light" : "dark")}
+                    className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-purple-400/40 text-slate-100 font-semibold transition"
+                  >
+                    {themeMode === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                  </button>
+                  <span className="px-3.5 py-2 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-mono">
+                    🛡️ Judge Audit: {Math.round((audit.score || 0.96) * 100)}/100
+                  </span>
+                  <button
+                    onClick={() => {
+                      setActiveTab("chat");
+                      scrollToChatBottom();
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-500 via-purple-500 to-amber-400 hover:opacity-95 text-slate-950 font-extrabold shadow-lg"
+                  >
+                    <span>✨ Ask Venus AI ({chatMessages.length})</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                {NAV_ITEMS.map(t => (
+                  <button
+                    key={t.id}
+                    onClick={() => {
+                      setActiveTab(t.id);
+                      if (t.id === "chat") scrollToChatBottom();
+                    }}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
+                      activeTab === t.id
+                        ? "bg-purple-500 text-white shadow-md"
+                        : "bg-slate-900/70 hover:bg-slate-800 text-slate-300 border border-purple-500/20"
+                    }`}
+                  >
+                    {t.icon} {t.short}
+                  </button>
+                ))}
+              </div>
+            </header>
+
+            <main className="flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+          {activeTab === "executive" && (
+            <div className="space-y-5">
+              <div className="glass rounded-2xl p-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs border-l-4 border-cyan-400">
+                <div className="space-y-1">
+                  <div className="font-bold text-cyan-300 uppercase tracking-wider">👤 In Everyday Terms (For Anyone / HR / Executives)</div>
+                  <p className="text-slate-300 leading-relaxed">
+                    Instead of writing complex quantum physics code, you pick a real-world business problem below (carbon capture chemistry, fleet logistics, cybersecurity threat hunting, or drug safety) and click <strong>Execute</strong>. AI agents translate your English goal into a quantum circuit, run 1,024 simulations, and explain the winning decision in plain English.
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  <div className="font-bold text-purple-300 uppercase tracking-wider">🔬 For the Quantum Scientist & Principal Architect</div>
+                  <p className="text-slate-300 leading-relaxed">
+                    Executes a 6-stage governed workflow: Vector Store Recall → AI Planner → Hamiltonian / Ising QUBO Problem Encoder → Dual-SDK Circuit Generator (<strong>Google Cirq & IBM Qiskit</strong> for VQE, QAOA, Grover, QSVM) → Statevector / Shot Simulator (Ideal or NISQ Depolarizing Noise <code>p=0.03</code>) → Independent LLM-as-Judge Audit.
+                  </p>
+                </div>
+              </div>
 
           <section>
             <div className="flex items-center justify-between mb-2">
@@ -541,31 +993,6 @@
             })}
           </section>
 
-          {/* Audience View Switcher */}
-          <div className="flex flex-wrap gap-2 border-b border-slate-800 pb-3">
-            {[
-              { id: "executive", label: "👔 Executive Results & Metrics" },
-              { id: "governance", label: `🛡️ AI Governance & LLM-as-Judge (${Math.round((audit.score || 0.96) * 100)}%)` },
-              { id: "quantum", label: "⚛️ Quantum Circuit & Telemetry" },
-              { id: "chat", label: "💬 Venus Quantum AI (Chat)" },
-              { id: "memory", label: `🗂️ Discovery Memory (${memoryList.length})` }
-            ].map(t => (
-              <button
-                key={t.id}
-                onClick={() => setActiveTab(t.id)}
-                className={`px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition ${
-                  activeTab === t.id
-                    ? "bg-cyan-500 text-slate-950 shadow-md"
-                    : "glass-card text-slate-300 hover:text-white"
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-
-          {activeTab === "executive" && (
-            <div className="space-y-5">
               {/* Annotated 4-KPI Explainer Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="glass rounded-2xl p-4 border-l-4 border-cyan-400">
@@ -867,62 +1294,166 @@
                   </div>
                 </div>
               </div>
+
+              {/* Historical Judge Analytics: Overall Average, Grouped Scores & Question History */}
+              {govAnalytics && (
+                <div className="glass rounded-2xl p-6 space-y-5 border border-purple-500/30">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <h3 className="text-sm font-bold uppercase tracking-wider text-amber-300">
+                        📊 Memory-Aware LLM-as-Judge Historical Analytics (Overall & Grouped Averages)
+                      </h3>
+                      <p className="text-xs text-slate-300">
+                        The Judge agent has direct access to all {govAnalytics.total_evaluated_runs} historical questions asked and their audit scores to benchmark every new run against historical baselines.
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 text-xs">
+                      {[
+                        { id: "algorithm", label: "Group by Algorithm (VQE/QAOA/Grover/QSVM)" },
+                        { id: "framework", label: "Group by SDK (Qiskit vs Cirq)" },
+                        { id: "domain", label: "Group by Scientific Domain" }
+                      ].map(g => (
+                        <button
+                          key={g.id}
+                          onClick={() => setGroupByMode(g.id)}
+                          className={`px-3 py-1.5 rounded-xl font-semibold transition ${
+                            groupByMode === g.id
+                              ? "bg-purple-500 text-white shadow"
+                              : "bg-slate-900 text-slate-300 border border-purple-500/25 hover:bg-slate-800"
+                          }`}
+                        >
+                          {g.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                    <div className="glass-card p-3.5 rounded-xl border-l-4 border-emerald-400">
+                      <div className="text-slate-400">Overall Average Judge Score</div>
+                      <div className="text-2xl font-extrabold font-mono text-emerald-300">{govAnalytics.overall_average_score_pct}%</div>
+                      <div className="text-[11px] text-slate-400">Across {govAnalytics.total_evaluated_runs} audited runs</div>
+                    </div>
+                    <div className="glass-card p-3.5 rounded-xl border-l-4 border-purple-400">
+                      <div className="text-slate-400">Current Run vs. Historical Avg</div>
+                      <div className="text-2xl font-extrabold font-mono text-purple-300">
+                        {(Math.round((audit.score || 0.96) * 1000) / 10).toFixed(1)}%
+                      </div>
+                      <div className="text-[11px] text-emerald-300 font-mono">
+                        {(((audit.score || 0.96) * 100) - govAnalytics.overall_average_score_pct >= 0 ? "+" : "")}
+                        {(((audit.score || 0.96) * 100) - govAnalytics.overall_average_score_pct).toFixed(1)}% vs overall mean
+                      </div>
+                    </div>
+                    <div className="glass-card p-3.5 rounded-xl border-l-4 border-amber-400">
+                      <div className="text-slate-400">Score Range (Min – Max)</div>
+                      <div className="text-xl font-extrabold font-mono text-amber-300">
+                        {govAnalytics.min_score_pct}% – {govAnalytics.max_score_pct}%
+                      </div>
+                      <div className="text-[11px] text-slate-400">Zero drift outside GxP bounds</div>
+                    </div>
+                    <div className="glass-card p-3.5 rounded-xl border-l-4 border-cyan-400">
+                      <div className="text-slate-400">Autonomous Approval Rate</div>
+                      <div className="text-2xl font-extrabold font-mono text-cyan-300">{govAnalytics.approval_rate_pct}%</div>
+                      <div className="text-[11px] text-slate-400">Persisted on Kubernetes PVC</div>
+                    </div>
+                  </div>
+
+                  {/* Grouped Averages Breakdown */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    {(groupByMode === "algorithm"
+                      ? govAnalytics.grouped_by_algorithm
+                      : groupByMode === "framework"
+                      ? govAnalytics.grouped_by_framework
+                      : govAnalytics.grouped_by_domain
+                    ).map((grp, gIdx) => (
+                      <div key={gIdx} className="glass-card p-4 rounded-xl space-y-2 border border-purple-500/20">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-white text-sm">{grp.group}</span>
+                          <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-200 font-mono">{grp.count} run(s)</span>
+                        </div>
+                        <div className="flex items-baseline justify-between">
+                          <span className="text-slate-400">Group Average Score:</span>
+                          <span className="text-lg font-extrabold font-mono text-emerald-300">{grp.avg_score_pct}%</span>
+                        </div>
+                        <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-violet-500 to-emerald-400" style={{ width: `${grp.avg_score_pct}%` }} />
+                        </div>
+                        <div className="text-[11px] text-slate-400 font-mono flex justify-between">
+                          <span>Min: {grp.min_score_pct}%</span>
+                          <span>Max: {grp.max_score_pct}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Historical Questions Asked & Judge Scores Log */}
+                  <div className="space-y-2">
+                    <div className="text-xs font-bold uppercase tracking-wider text-purple-300">
+                      📜 History of What We Asked & Individual LLM-as-Judge Scores
+                    </div>
+                    <div className="max-h-64 overflow-y-auto space-y-2 pr-1">
+                      {(govAnalytics.history_log || []).map((item, hIdx) => (
+                        <div key={hIdx} className="glass-card p-3 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs">
+                          <div className="space-y-0.5 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="px-2 py-0.5 rounded bg-slate-800 text-amber-300 font-mono font-bold">#{item.run_index}</span>
+                              <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-200 font-mono">{item.algorithm} • {item.framework}</span>
+                              <span className="text-slate-400 font-mono text-[11px]">{item.timestamp}</span>
+                            </div>
+                            <div className="text-white font-medium truncate">"{item.question_or_goal}"</div>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono font-bold">
+                              Score: {item.score_pct}% ({item.delta_vs_avg_pct >= 0 ? `+${item.delta_vs_avg_pct}` : item.delta_vs_avg_pct}% vs avg)
+                            </span>
+                            <button
+                              onClick={() => askCopilot(`Explain why historical run #${item.run_index} ("${item.question_or_goal}") received a Judge score of ${item.score_pct}% and how it compares to our ${govAnalytics.overall_average_score_pct}% average.`)}
+                              className="px-2.5 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/35 border border-purple-400/40 text-purple-200 font-semibold"
+                            >
+                              ✨ Ask Judge
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
           {activeTab === "chat" && (
-            <div className="glass rounded-2xl p-6 space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
-                <div>
-                  <h3 className="text-base font-bold text-white flex items-center gap-2">
-                    💬 Venus Quantum AI — Platform Guide & Quantum Execution Advisor
-                  </h3>
-                  <p className="text-xs text-slate-400">
-                    Powered by LiteLLM Gateway ({model || "gemini-4-argon"}) • Ask general questions about what this framework can do OR analyze your last quantum run
-                  </p>
-                </div>
-                <button
-                  onClick={() => setChatMessages([])}
-                  className="px-3 py-1 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700"
-                >
-                  Reset Conversation
-                </button>
-              </div>
-
-              {/* Pinned Last Executed Command Context Card */}
-              <div className="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-4 space-y-2.5">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
-                    📌 Active Context — Last Executed Command
-                  </span>
-                  <span className="text-[11px] font-mono text-emerald-400">
-                    Governance Score: {Math.round((audit.score || 0.96) * 100)}/100 ({audit.approved !== false ? "APPROVED" : "FLAGGED"})
-                  </span>
-                </div>
-                <div className="text-sm font-semibold text-white bg-slate-950/80 px-3.5 py-2.5 rounded-lg border border-slate-800">
-                  "{lastExecutedPrompt}"
-                </div>
-                <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="px-2.5 py-1 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-semibold">
-                    Algorithm: {result?.selected_algorithm || "VQE"} ({(telemetry.framework || framework).toUpperCase()})
-                  </span>
-                  <span className="px-2.5 py-1 rounded-md bg-slate-800 text-slate-200 border border-slate-700 font-mono">
-                    Winning State: |{execSummary.dominant_state || "01"}⟩ ({((execSummary.dominant_probability || 0) * 100).toFixed(1)}%)
-                  </span>
-                  <span className="px-2.5 py-1 rounded-md bg-slate-800 text-emerald-300 border border-slate-700">
-                    {varMetrics.metric_name || "Metric"}: {varMetrics.converged_energy_hartree ?? varMetrics.converged_cost ?? varMetrics.kernel_alignment_score ?? varMetrics.quadratic_speedup_factor ?? "—"} {varMetrics.unit || ""}
-                  </span>
-                  <span className="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
-                    Variables: {(encoded.variables || []).join(", ")}
-                  </span>
-                </div>
-              </div>
-              {/* Dual Prompt Categories: 1. General Framework Q&A  2. Last-Run Analysis */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div className="glass-card rounded-xl p-3.5 space-y-2">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">
-                    🌐 Ask About the Venus Framework & Capabilities (General Q&A)
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Left Column: Active Run Context & 1-Click Prompts */}
+              <div className="lg:col-span-4 glass rounded-2xl p-5 space-y-4 flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-900/90 border border-purple-400/40">
+                    <VenusAvatar size="lg" thinking={chatLoading} />
+                    <div>
+                      <div className="text-[11px] font-mono uppercase text-amber-300">Multi-Turn Quantum Copilot</div>
+                      <h3 className="text-base font-bold text-white">Venus Quantum AI</h3>
+                      <div className="text-[11px] text-emerald-400 font-mono">
+                        {chatLoading ? `⚡ Synthesizing (${chatElapsed}s)...` : `Online • ${chatMessages.length} turns`}
+                      </div>
+                    </div>
                   </div>
+
+                  <div className="bg-slate-900/80 border border-purple-500/30 rounded-xl p-3.5 space-y-1.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase text-amber-300">📌 Active Run Context</span>
+                      <span className="text-[10px] font-mono text-emerald-400">
+                        Judge: {Math.round((audit.score || 0.96) * 100)}/100
+                      </span>
+                    </div>
+                    <div className="text-xs font-semibold text-white truncate">"{lastExecutedPrompt}"</div>
+                    <div className="text-[11px] text-purple-200 font-mono">
+                      {result?.selected_algorithm || "VQE"} ({(telemetry.framework || framework).toUpperCase()}) • State |{execSummary.dominant_state || "01"}⟩ ({((execSummary.dominant_probability || 0) * 100).toFixed(1)}%)
+                    </div>
+                  </div>
+
                   <div className="space-y-1.5">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">
+                      🌐 General Framework Q&A
+                    </div>
                     {[
                       "What can the Venus Governed Quantum Agents framework do for an enterprise?",
                       "Explain Hardware Mode (Ideal Simulator vs. NISQ Noise) and Shots in simple words",
@@ -933,92 +1464,126 @@
                         key={i}
                         onClick={() => askCopilot(q)}
                         disabled={chatLoading}
-                        className="w-full text-left px-3 py-2 rounded-lg text-xs bg-slate-900/90 hover:bg-emerald-950/50 text-slate-200 hover:text-emerald-300 border border-slate-800 hover:border-emerald-500/40 transition flex items-start gap-2"
+                        className="w-full text-left px-3 py-2 rounded-xl text-xs glass-card hover:border-purple-400/60 text-slate-200 transition"
                       >
-                        <span className="text-emerald-400 font-bold">🌐</span>
-                        <span>{q}</span>
+                        🌐 {q}
                       </button>
                     ))}
                   </div>
-                </div>
 
-                <div className="glass-card rounded-xl p-3.5 space-y-2">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
-                    🔬 Ask About Your Last Executed {result?.selected_algorithm || "Quantum"} Run
-                  </div>
                   <div className="space-y-1.5">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-amber-300">
+                      🔬 Analyze Last {result?.selected_algorithm || "Quantum"} Run
+                    </div>
                     {[
                       `Explain in simple, normal words what state |${execSummary.dominant_state || "01"}⟩ at ${((execSummary.dominant_probability || 0) * 100).toFixed(1)}% means for this problem`,
                       `What do the variables (${(encoded.variables || ["var_1", "var_2"]).join(", ")}) mean and what business action should we take?`,
-                      `Why did the independent LLM-as-Judge give this run ${Math.round((audit.score || 0.96) * 100)}/100 and what are the caveats?`,
-                      `Explain the ${telemetry.num_qubits || 2}-qubit circuit gates and depth=${telemetry.circuit_depth || 6} step by step for a beginner`
+                      `Why did the independent LLM-as-Judge give this run ${Math.round((audit.score || 0.96) * 100)}/100 and what are the caveats?`
                     ].map((q, i) => (
                       <button
                         key={i}
                         onClick={() => askCopilot(q)}
                         disabled={chatLoading}
-                        className="w-full text-left px-3 py-2 rounded-lg text-xs bg-slate-900/90 hover:bg-cyan-950/60 text-slate-200 hover:text-cyan-300 border border-slate-800 hover:border-cyan-500/40 transition flex items-start gap-2"
+                        className="w-full text-left px-3 py-2 rounded-xl text-xs glass-card hover:border-amber-400/60 text-amber-100 transition"
                       >
-                        <span className="text-cyan-400 font-bold">✨</span>
-                        <span>{q}</span>
+                        ✨ {q}
                       </button>
                     ))}
                   </div>
                 </div>
+
+                <button
+                  onClick={() => setChatMessages([chatMessages[0]])}
+                  className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-300 font-semibold transition"
+                >
+                  🗑️ Reset Multi-Turn Conversation
+                </button>
               </div>
 
-              {/* Chat Messages Area */}
-              <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 h-80 overflow-y-auto space-y-3">
-                {chatMessages.length === 0 && (
-                  <div className="text-center text-slate-400 text-xs py-14 space-y-2">
-                    <div className="text-2xl">⚛️🤖</div>
-                    <div className="font-semibold text-slate-200">Welcome to Venus Quantum AI</div>
-                    <div>Ask any general question about what this framework can do (left) or analyze your active {result?.selected_algorithm || "VQE"} simulation (right).</div>
+              {/* Right Column: Full-Height Multi-Turn Chat Stream */}
+              <div className="lg:col-span-8 glass rounded-2xl p-5 flex flex-col h-[680px]">
+                {/* Active Context Track Banner */}
+                <div className="mb-3 p-2.5 rounded-xl bg-slate-900/90 border border-purple-500/30 flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-400">Active Context Track:</span>
+                    <span className="px-2.5 py-0.5 rounded-lg bg-purple-500/20 border border-purple-400/50 text-purple-200 font-bold">
+                      {personaMode === "plain"
+                        ? "1. 👤 Everyday Plain-Language Track (Deep Detail)"
+                        : personaMode === "scientist"
+                        ? "2. 🔬 Quantum Scientist Track (Deep Detail)"
+                        : personaMode === "steps"
+                        ? "3. 🧭 Step-by-Step Practical Guide Track (Deep Detail)"
+                        : "🌍 All 3 Tracks (Click '+ Extend' or '🎯 Focus Track' on any card)"}
+                    </span>
                   </div>
-                )}
+                  {personaMode !== "dual" && (
+                    <button
+                      onClick={() => setPersonaMode("dual")}
+                      className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-[11px] text-amber-300 font-semibold"
+                    >
+                      🔄 Show All 3 Tracks Again
+                    </button>
+                  )}
+                </div>
+
+                {/* Chat Messages Area */}
+                <div ref={chatScrollRef} className="flex-1 bg-slate-950/75 border border-purple-500/20 rounded-xl p-4 overflow-y-auto space-y-4 scroll-smooth">
                 {chatMessages.map((msg, i) => (
-                  <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                    <div className={`max-w-3xl rounded-2xl px-4 py-3 text-xs md:text-sm leading-relaxed whitespace-pre-wrap ${
-                      msg.role === "user"
-                        ? "bg-cyan-600 text-white"
-                        : "bg-slate-900 border border-slate-700 text-slate-100"
-                    }`}>
-                      {msg.role === "assistant" && (
-                        <div className="text-[10px] font-mono text-cyan-400 mb-1">
-                          Venus Quantum AI • {msg.model || "gemini-4-argon"} ({msg.source || "litellm-gateway"})
-                        </div>
-                      )}
-                      {msg.content}
+                  msg.role === "user" ? (
+                    <div key={i} className="flex items-start justify-end gap-3">
+                      <div className="max-w-xl rounded-2xl rounded-tr-sm bg-gradient-to-r from-cyan-600/40 to-blue-600/40 border border-cyan-400/50 p-3.5 text-xs text-white shadow">
+                        <div className="text-[10px] font-mono uppercase text-cyan-300 mb-1">You (Quantum Architect / Executive)</div>
+                        <div className="whitespace-pre-wrap leading-relaxed">{msg.content}</div>
+                      </div>
+                      <UserQuantumAvatar />
                     </div>
-                  </div>
+                  ) : (
+                    <VenusTurnBubble
+                      key={i}
+                      msg={msg}
+                      idx={i}
+                      personaMode={personaMode}
+                      onSelectContextTrack={selectAndContinueInTrack}
+                      askCopilot={askCopilot}
+                      disabled={chatLoading}
+                    />
+                  )
                 ))}
                 {chatLoading && (
-                  <div className="p-3 rounded-xl bg-cyan-950/40 border border-cyan-500/40 text-xs text-cyan-300 flex items-center justify-between">
-                    <span className="animate-pulse font-semibold">
-                      🧠 Venus Quantum AI ({model || "gemini-4-argon"}) is formulating a plain-English response...
-                    </span>
-                    <span className="font-mono font-bold">⏱️ {chatElapsed}s</span>
+                  <div className="flex items-start gap-3 animate-pulse">
+                    <VenusAvatar size="md" thinking={true} />
+                    <div className="glass-card rounded-2xl p-4 border border-cyan-400/50 space-y-1.5 max-w-lg">
+                      <div className="flex items-center gap-2 text-xs font-mono text-amber-300">
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+                        <span>⚡ Venus Quantum AI ({model || "gemini-4-argon"}) is synthesizing response • ⏱️ {chatElapsed}s...</span>
+                      </div>
+                      <div className="text-[11px] text-slate-400">
+                        Inspecting active quantum circuit, bitstring histogram & LLM-as-Judge telemetry (continues in background if you switch menus).
+                      </div>
+                    </div>
                   </div>
                 )}
+                <div ref={chatEndRef} />
               </div>
 
-              {/* Chat Input Bar */}
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={chatInput}
-                  onChange={e => setChatInput(e.target.value)}
-                  onKeyDown={e => { if (e.key === "Enter") askCopilot(chatInput); }}
-                  placeholder="Ask a follow-up question about the quantum state, circuit gates, energy convergence, or governance audit..."
-                  className="flex-1 bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-sm text-white outline-none"
-                />
-                <button
-                  onClick={() => askCopilot(chatInput)}
-                  disabled={chatLoading || !chatInput.trim()}
-                  className="px-5 py-2.5 rounded-xl font-semibold text-xs md:text-sm bg-gradient-to-r from-cyan-500 to-blue-600 text-white disabled:opacity-50"
-                >
-                  Send →
-                </button>
+                {/* Chat Input Bar */}
+                <div className="pt-3 mt-3 border-t border-purple-500/20 flex gap-2">
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={e => setChatInput(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter") askCopilot(chatInput); }}
+                    placeholder="Ask a follow-up question about the quantum state, circuit gates, energy convergence, or governance audit..."
+                    className="flex-1 bg-slate-900 border border-purple-500/30 focus:border-amber-400 rounded-xl px-4 py-2.5 text-sm text-white outline-none"
+                  />
+                  <button
+                    onClick={() => askCopilot(chatInput)}
+                    disabled={chatLoading || !chatInput.trim()}
+                    className="px-5 py-2.5 rounded-xl font-bold text-xs md:text-sm bg-gradient-to-r from-violet-500 via-purple-500 to-amber-400 text-slate-950 disabled:opacity-50"
+                  >
+                    {chatLoading ? `⏱️ ${chatElapsed}s...` : "Send Turn ➢"}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -1151,6 +1716,8 @@
               </div>
             </div>
           )}
+            </main>
+          </div>
         </div>
       );
     }

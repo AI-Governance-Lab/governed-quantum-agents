@@ -123,13 +123,15 @@ async def solve_problem(
     print(f"  - Scientific Natural Language Interpretation: {interpretation_findings.get('interpretation')}")
     print(f"  - Estimation Confidence: {interpretation_findings.get('confidence')}")
 
-    # Step 6: Governance Audit
+    # Step 6: Governance Audit (with full historical questions & score analytics)
     print("\n[EXECUTION] Step 6: AI Governance Safety Audit (LLM-as-Judge)...")
+    historical_analytics = vector_store.get_governance_analytics()
     judge_findings = await judge.evaluate(
         problem_description,
         interpretation_findings,
         execution_summary=execution_summary,
-        selected_algorithm=selected_algorithm
+        selected_algorithm=selected_algorithm,
+        historical_analytics=historical_analytics
     )
     print(f"  - Safety Approved: {judge_findings.get('approved')}")
     print(f"  - Compliance Score: {judge_findings.get('score')}")
